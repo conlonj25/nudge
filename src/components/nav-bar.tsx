@@ -1,51 +1,76 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { type Session } from "next-auth";
 
-export function NavBarComponent() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+type NavBarComponentProps = {
+  session: Session | null;
+};
+
+export function NavBarComponent({ session }: NavBarComponentProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <nav className="bg-background border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+    <nav className="border-b border-border bg-background">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-semibold text-foreground">Nudge</span>
+            <div className="flex flex-shrink-0 items-center">
+              <span className="text-2xl font-semibold text-foreground">
+                Nudge
+              </span>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <a href="#" className="border-primary text-foreground inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <a
+                href="#"
+                className="inline-flex items-center border-b-2 border-primary px-1 pt-1 text-sm font-medium text-foreground"
+              >
                 Home
               </a>
-              <a href="#" className="border-transparent text-muted-foreground hover:text-foreground hover:border-border inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <a
+                href="#"
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
+              >
                 About
               </a>
-              <a href="#" className="border-transparent text-muted-foreground hover:text-foreground hover:border-border inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <a
+                href="#"
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
+              >
                 Services
               </a>
-              <a href="#" className="border-transparent text-muted-foreground hover:text-foreground hover:border-border inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <a
+                href="#"
+                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
+              >
                 Contact
               </a>
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            <Link
+              href={session ? "/api/auth/signout" : "/api/auth/signin"}
+              className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
             >
-              Sign in
-            </button>
+              <button
+                type="button"
+                className="block w-full px-4 py-2 text-left text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                {session ? "Sign out" : "Sign in"}
+              </button>
+            </Link>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button
               onClick={toggleMenu}
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               aria-controls="mobile-menu"
               aria-expanded="false"
             >
@@ -62,44 +87,49 @@ export function NavBarComponent() {
 
       {isMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
-          <div className="pt-2 pb-3 space-y-1">
+          <div className="space-y-1 pb-3 pt-2">
             <a
               href="#"
-              className="bg-accent border-primary text-foreground block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              className="block border-l-4 border-primary bg-accent py-2 pl-3 pr-4 text-base font-medium text-foreground"
             >
               Home
             </a>
             <a
               href="#"
-              className="border-transparent text-muted-foreground hover:bg-accent hover:border-border hover:text-foreground block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
             >
               About
             </a>
             <a
               href="#"
-              className="border-transparent text-muted-foreground hover:bg-accent hover:border-border hover:text-foreground block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
             >
               Services
             </a>
             <a
               href="#"
-              className="border-transparent text-muted-foreground hover:bg-accent hover:border-border hover:text-foreground block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
             >
               Contact
             </a>
           </div>
-          <div className="pt-4 pb-3 border-t border-border">
+          <div className="border-t border-border pb-3 pt-4">
             <div className="mt-3 space-y-1">
-              <button
-                type="button"
-                className="block w-full text-left px-4 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent"
+              <Link
+                href={session ? "/api/auth/signout" : "/api/auth/signin"}
+                className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
               >
-                Sign in
-              </button>
+                <button
+                  type="button"
+                  className="block w-full px-4 py-2 text-left text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+                >
+                  {session ? "Sign out" : "Sign in"}
+                </button>
+              </Link>
             </div>
           </div>
         </div>
       )}
     </nav>
-  )
+  );
 }
