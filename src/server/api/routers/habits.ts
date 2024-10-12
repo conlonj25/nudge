@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { eq } from 'drizzle-orm';
 
 import {
   createTRPCRouter,
   protectedProcedure,
 } from "~/server/api/trpc";
-import { habits } from "~/server/db/schema";
+import { habits, logs } from "~/server/db/schema";
 
 export const habitRouter = createTRPCRouter({
 
@@ -26,5 +27,18 @@ export const habitRouter = createTRPCRouter({
       return habit ?? null;
     }),
 
-  
+    getByDate: protectedProcedure
+    .input(z.object({ date: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const habit = await ctx.db.select({
+          id: logs.id,
+          name: habits.name,
+          value: logs.valueBoolean
+        })
+          .from(logs)
+          .where(eq(logs.date, input.date))
+          .leftJoin(habits, eq(logs.habitId, habits.id));
+
+          return habit ?? null;
+    }),
 });
