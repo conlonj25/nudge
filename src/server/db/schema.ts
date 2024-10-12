@@ -133,22 +133,22 @@ export const verificationTokens = createTable(
   }),
 );
 
-export const taskTypeEnum = pgEnum("taskType", ["boolean", "number"]);
-export const tasks = createTable("task", {
+export const habitTypeEnum = pgEnum("habitType", ["boolean", "number"]);
+export const habits = createTable("habit", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),
   name: varchar("name", { length: 256 }).notNull(),
-  taskType: taskTypeEnum("taskType").notNull().default("boolean"),
+  habitType: habitTypeEnum("habitType").notNull().default("boolean"),
 });
 
 export const logs = createTable("log", {
   id: serial("id").primaryKey(),
   date: date("date").notNull(),
-  taskId: varchar("task_id", { length: 255 })
+  habitId: integer('habit_id')
     .notNull()
-    .references(() => tasks.id),
+    .references(() => habits.id),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),

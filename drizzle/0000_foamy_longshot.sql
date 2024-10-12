@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."itemType" AS ENUM('boolean', 'number');
+ CREATE TYPE "public"."taskType" AS ENUM('boolean', 'number');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -19,20 +19,13 @@ CREATE TABLE IF NOT EXISTS "nudge_account" (
 	CONSTRAINT "nudge_account_provider_provider_account_id_pk" PRIMARY KEY("provider","provider_account_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "nudge_date" (
+CREATE TABLE IF NOT EXISTS "nudge_log" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"date" date NOT NULL,
-	"item_id" varchar(255) NOT NULL,
+	"task_id" integer NOT NULL,
 	"user_id" varchar(255) NOT NULL,
 	"value_boolean" boolean,
 	"value_number" numeric
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "nudge_item" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" varchar(255) NOT NULL,
-	"name" varchar(256) NOT NULL,
-	"itemType" "itemType" DEFAULT 'boolean' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nudge_post" (
@@ -47,6 +40,13 @@ CREATE TABLE IF NOT EXISTS "nudge_session" (
 	"session_token" varchar(255) PRIMARY KEY NOT NULL,
 	"user_id" varchar(255) NOT NULL,
 	"expires" timestamp with time zone NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "nudge_task" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" varchar(255) NOT NULL,
+	"name" varchar(256) NOT NULL,
+	"taskType" "taskType" DEFAULT 'boolean' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nudge_user" (
@@ -71,19 +71,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "nudge_date" ADD CONSTRAINT "nudge_date_item_id_nudge_item_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."nudge_item"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "nudge_log" ADD CONSTRAINT "nudge_log_task_id_nudge_task_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."nudge_task"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "nudge_date" ADD CONSTRAINT "nudge_date_user_id_nudge_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."nudge_user"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "nudge_item" ADD CONSTRAINT "nudge_item_user_id_nudge_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."nudge_user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "nudge_log" ADD CONSTRAINT "nudge_log_user_id_nudge_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."nudge_user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -96,6 +90,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "nudge_session" ADD CONSTRAINT "nudge_session_user_id_nudge_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."nudge_user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "nudge_task" ADD CONSTRAINT "nudge_task_user_id_nudge_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."nudge_user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

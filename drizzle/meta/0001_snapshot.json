@@ -1,6 +1,6 @@
 {
-  "id": "f46d28cf-76f2-47e7-9e89-8cd89fcce04b",
-  "prevId": "056df669-a7cf-4580-b5da-5f7bde85e5ae",
+  "id": "49735633-d629-44d2-994b-5a1e5881ec51",
+  "prevId": "daaafa4b-5220-429e-8f93-01d5dd332c76",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -118,6 +118,56 @@
       },
       "uniqueConstraints": {}
     },
+    "public.nudge_habit": {
+      "name": "nudge_habit",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "habitType": {
+          "name": "habitType",
+          "type": "habitType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'boolean'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nudge_habit_user_id_nudge_user_id_fk": {
+          "name": "nudge_habit_user_id_nudge_user_id_fk",
+          "tableFrom": "nudge_habit",
+          "tableTo": "nudge_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.nudge_log": {
       "name": "nudge_log",
       "schema": "",
@@ -134,9 +184,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "task_id": {
-          "name": "task_id",
-          "type": "varchar(255)",
+        "habit_id": {
+          "name": "habit_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -161,12 +211,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "nudge_log_task_id_nudge_task_id_fk": {
-          "name": "nudge_log_task_id_nudge_task_id_fk",
+        "nudge_log_habit_id_nudge_habit_id_fk": {
+          "name": "nudge_log_habit_id_nudge_habit_id_fk",
           "tableFrom": "nudge_log",
-          "tableTo": "nudge_task",
+          "tableTo": "nudge_habit",
           "columnsFrom": [
-            "task_id"
+            "habit_id"
           ],
           "columnsTo": [
             "id"
@@ -335,56 +385,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.nudge_task": {
-      "name": "nudge_task",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "taskType": {
-          "name": "taskType",
-          "type": "taskType",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'boolean'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "nudge_task_user_id_nudge_user_id_fk": {
-          "name": "nudge_task_user_id_nudge_user_id_fk",
-          "tableFrom": "nudge_task",
-          "tableTo": "nudge_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.nudge_user": {
       "name": "nudge_user",
       "schema": "",
@@ -464,8 +464,8 @@
     }
   },
   "enums": {
-    "public.taskType": {
-      "name": "taskType",
+    "public.habitType": {
+      "name": "habitType",
       "schema": "public",
       "values": [
         "boolean",

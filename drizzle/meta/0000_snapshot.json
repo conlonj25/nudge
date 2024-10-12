@@ -1,5 +1,5 @@
 {
-  "id": "056df669-a7cf-4580-b5da-5f7bde85e5ae",
+  "id": "daaafa4b-5220-429e-8f93-01d5dd332c76",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -118,8 +118,8 @@
       },
       "uniqueConstraints": {}
     },
-    "public.nudge_date": {
-      "name": "nudge_date",
+    "public.nudge_log": {
+      "name": "nudge_log",
       "schema": "",
       "columns": {
         "id": {
@@ -134,9 +134,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "item_id": {
-          "name": "item_id",
-          "type": "varchar(255)",
+        "task_id": {
+          "name": "task_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -161,12 +161,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "nudge_date_item_id_nudge_item_id_fk": {
-          "name": "nudge_date_item_id_nudge_item_id_fk",
-          "tableFrom": "nudge_date",
-          "tableTo": "nudge_item",
+        "nudge_log_task_id_nudge_task_id_fk": {
+          "name": "nudge_log_task_id_nudge_task_id_fk",
+          "tableFrom": "nudge_log",
+          "tableTo": "nudge_task",
           "columnsFrom": [
-            "item_id"
+            "task_id"
           ],
           "columnsTo": [
             "id"
@@ -174,59 +174,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "nudge_date_user_id_nudge_user_id_fk": {
-          "name": "nudge_date_user_id_nudge_user_id_fk",
-          "tableFrom": "nudge_date",
-          "tableTo": "nudge_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.nudge_item": {
-      "name": "nudge_item",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "itemType": {
-          "name": "itemType",
-          "type": "itemType",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'boolean'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "nudge_item_user_id_nudge_user_id_fk": {
-          "name": "nudge_item_user_id_nudge_user_id_fk",
-          "tableFrom": "nudge_item",
+        "nudge_log_user_id_nudge_user_id_fk": {
+          "name": "nudge_log_user_id_nudge_user_id_fk",
+          "tableFrom": "nudge_log",
           "tableTo": "nudge_user",
           "columnsFrom": [
             "user_id"
@@ -385,6 +335,56 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.nudge_task": {
+      "name": "nudge_task",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "taskType": {
+          "name": "taskType",
+          "type": "taskType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'boolean'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nudge_task_user_id_nudge_user_id_fk": {
+          "name": "nudge_task_user_id_nudge_user_id_fk",
+          "tableFrom": "nudge_task",
+          "tableTo": "nudge_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.nudge_user": {
       "name": "nudge_user",
       "schema": "",
@@ -464,8 +464,8 @@
     }
   },
   "enums": {
-    "public.itemType": {
-      "name": "itemType",
+    "public.taskType": {
+      "name": "taskType",
       "schema": "public",
       "values": [
         "boolean",
