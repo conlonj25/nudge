@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { type Session } from "next-auth";
+import { usePathname } from "next/navigation";
 
 type NavBarComponentProps = {
   session: Session | null;
@@ -16,6 +17,8 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const pathname = usePathname();
+
   return (
     <nav className="border-b border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -27,30 +30,18 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
               </span>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <a
-                href="#"
-                className="inline-flex items-center border-b-2 border-primary px-1 pt-1 text-sm font-medium text-foreground"
+              <Link
+                href={"/"}
+                className={`inline-flex items-center ${pathname === "/" ? "border-b-2 border-primary" : ""} px-1 pt-1 text-sm font-medium text-foreground`}
               >
-                Home
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
+                Today
+              </Link>
+              <Link
+                href={"/habits"}
+                className={`inline-flex items-center ${pathname === "/habits" ? "border-b-2 border-primary" : ""} px-1 pt-1 text-sm font-medium text-foreground`}
               >
-                About
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
-              >
-                Services
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground"
-              >
-                Contact
-              </a>
+                Habits
+              </Link>
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -88,30 +79,18 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
       {isMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
           <div className="space-y-1 pb-3 pt-2">
-            <a
-              href="#"
-              className="block border-l-4 border-primary bg-accent py-2 pl-3 pr-4 text-base font-medium text-foreground"
-            >
-              Home
-            </a>
-            <a
-              href="#"
+            <Link
+              href={"/"}
               className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
             >
-              About
-            </a>
-            <a
-              href="#"
+              Today
+            </Link>
+            <Link
+              href={"/habits"}
               className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
             >
-              Services
-            </a>
-            <a
-              href="#"
-              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
-            >
-              Contact
-            </a>
+              Habits
+            </Link>
           </div>
           <div className="border-t border-border pb-3 pt-4">
             <div className="mt-3 space-y-1">
