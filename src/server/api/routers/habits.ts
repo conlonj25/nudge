@@ -41,4 +41,17 @@ export const habitRouter = createTRPCRouter({
 
           return habit ?? null;
     }),
+
+    setLogEntry: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      value: z.boolean(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.update(logs).set({
+        valueBoolean: input.value,
+      })
+      .where(eq(logs.id, input.id));
+    }),
+
 });
