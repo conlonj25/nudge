@@ -29,12 +29,14 @@ export function DailyHabits() {
 
   const [todaysHabits, setTodaysHabits] = useState<Habit[]>([]);
 
-  const [data] = api.habit.getByDate.useSuspenseQuery({
+  const { data } = api.habit.getByDate.useQuery({
     date: dateComponent ?? "",
   });
 
   useEffect(() => {
-    setTodaysHabits(data);
+    if (data) {
+      setTodaysHabits(data);
+    }
   }, [data]);
 
   const utils = api.useUtils();
