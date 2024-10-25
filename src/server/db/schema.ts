@@ -148,7 +148,7 @@ export const logs = createTable("log", {
   date: date("date").notNull(),
   habitId: integer('habit_id')
     .notNull()
-    .references(() => habits.id),
+    .references(() => habits.id, {onDelete: 'cascade'}),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),

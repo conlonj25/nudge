@@ -19,6 +19,27 @@ export const habitRouter = createTRPCRouter({
       });
     }),
 
+    update: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      newName: z.string().min(1)
+    }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.update(habits).set({
+        name: input.newName,
+      })
+      .where(eq(habits.id, input.id));
+    }),
+
+    delete: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(habits)
+      .where(eq(habits.id, input.id));
+    }),
+
     getLatest: protectedProcedure.query(async ({ ctx }) => {
       const habit = await ctx.db.query.habits.findMany({
         orderBy: (habits, { asc }) => [asc(habits.name)],
