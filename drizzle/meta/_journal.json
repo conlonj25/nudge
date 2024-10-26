@@ -22,6 +22,13 @@
       "when": 1729883567024,
       "tag": "0002_chilly_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1729957461172,
+      "tag": "0003_confused_black_widow",
+      "breakpoints": true
     }
   ]
 }

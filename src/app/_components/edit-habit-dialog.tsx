@@ -1,7 +1,6 @@
 "use client";
 
 import { type SyntheticEvent, useState } from "react";
-import { type z } from "zod";
 import { api } from "~/trpc/react";
 import { type Habit } from "../_types";
 
