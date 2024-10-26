@@ -1,7 +1,7 @@
 "use client";
 
 import { PopoverTrigger } from "@radix-ui/react-popover";
-import React, { useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useState } from "react";
 import { Popover, PopoverContent } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
@@ -18,8 +18,31 @@ type Habit = {
   value: boolean | null;
 };
 
+function dateReducer(
+  date: Date,
+  action: {
+    type: "INCREASE" | "DECREASE" | "EXACT";
+    payload?: Date;
+  },
+) {
+  let newDate = new Date(date);
+
+  if (action.type === "INCREASE") {
+    newDate.setDate(newDate.getDate() + 1);
+  }
+  if (action.type === "DECREASE") {
+    newDate.setDate(newDate.getDate() - 1);
+  }
+  if (action.type === "EXACT" && action.payload) {
+    newDate = action.payload;
+  }
+
+  return newDate;
+}
+
 export function DailyHabits() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  // const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, dispatch] = useReducer(dateReducer, new Date());
 
   const dateComponent = date
     ?.toISOString()
@@ -61,6 +84,7 @@ export function DailyHabits() {
 
   return (
     <div className="w-full max-w-xs">
+      <Button onClick={() => dispatch({ type: "DECREASE" })}>{"<"}</Button>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -78,12 +102,15 @@ export function DailyHabits() {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={(day: Date | undefined): void =>
+              dispatch({ type: "EXACT", payload: day })
+            }
             initialFocus
           />
         </PopoverContent>
       </Popover>
-      {todaysHabits ? <p>Your habits</p> : <p>You have no habits yet.</p>}
+      <Button onClick={() => dispatch({ type: "INCREASE" })}>{">"}</Button>
+      {date.toDateString()}
       {todaysHabits.map((habit) => (
         <div
           className="flex flex-row content-around items-end bg-slate-50"
