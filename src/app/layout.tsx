@@ -13,11 +13,10 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/star.png" }],
 };
 
-const session = await getServerAuthSession();
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await getServerAuthSession();
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
