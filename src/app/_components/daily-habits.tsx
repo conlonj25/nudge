@@ -1,7 +1,7 @@
 "use client";
 
 import { PopoverTrigger } from "@radix-ui/react-popover";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Popover, PopoverContent } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
@@ -11,6 +11,7 @@ import { api } from "~/trpc/react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
 import { Calendar } from "~/components/ui/calendar";
+import useDate from "~/hooks/useDate";
 
 type Habit = {
   id: number;
@@ -18,42 +19,14 @@ type Habit = {
   value: boolean | null;
 };
 
-function dateReducer(
-  date: Date,
-  action: {
-    type: "INCREASE" | "DECREASE" | "EXACT";
-    payload?: Date;
-  },
-) {
-  let newDate = new Date(date);
-
-  if (action.type === "INCREASE") {
-    newDate.setDate(newDate.getDate() + 1);
-  }
-  if (action.type === "DECREASE") {
-    newDate.setDate(newDate.getDate() - 1);
-  }
-  if (action.type === "EXACT" && action.payload) {
-    newDate = action.payload;
-  }
-
-  return newDate;
-}
-
 export function DailyHabits() {
-  // const [date, setDate] = useState<Date | undefined>(new Date());
-  const [date, dispatch] = useReducer(dateReducer, new Date());
-
-  const dateComponent = date
-    ?.toISOString()
-    .slice(0, 19)
-    .replace("T", " ")
-    .split(" ")[0];
-
   const [todaysHabits, setTodaysHabits] = useState<Habit[]>([]);
 
+  const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
+    useDate();
+
   const { data } = api.habit.getByDate.useQuery({
-    date: dateComponent ?? "",
+    date: calendarDate ?? "",
   });
 
   useEffect(() => {
@@ -74,7 +47,6 @@ export function DailyHabits() {
     const optimisticData = todaysHabits.map((h) => {
       return h.id === habit.id ? { ...habit, value: newValue } : h;
     });
-    console.log({ newValue, todaysHabits, optimisticData, habit });
     setTodaysHabits(optimisticData);
     setLog.mutate({
       id: habit.id,
@@ -84,7 +56,7 @@ export function DailyHabits() {
 
   return (
     <div className="w-full max-w-xs">
-      <Button onClick={() => dispatch({ type: "DECREASE" })}>{"<"}</Button>
+      <Button onClick={decreaseDate}>{"<"}</Button>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -102,14 +74,12 @@ export function DailyHabits() {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={(day: Date | undefined): void =>
-              dispatch({ type: "EXACT", payload: day })
-            }
+            onSelect={setExactDate}
             initialFocus
           />
         </PopoverContent>
       </Popover>
-      <Button onClick={() => dispatch({ type: "INCREASE" })}>{">"}</Button>
+      <Button onClick={increaseDate}>{">"}</Button>
       {date.toDateString()}
       {todaysHabits.map((habit) => (
         <div
