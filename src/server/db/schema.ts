@@ -112,25 +112,22 @@ export const verificationTokens = createTable(
   }),
 );
 
-export const habitTypeEnum = pgEnum("habitType", ["boolean", "number"]);
 export const habits = createTable("habit", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),
   name: varchar("name", { length: 256 }).notNull(),
-  habitType: habitTypeEnum("habitType").notNull().default("boolean"),
 });
 
 export const logs = createTable("log", {
   id: serial("id").primaryKey(),
-  date: date("date").notNull(),
-  habitId: integer('habit_id')
-    .notNull()
-    .references(() => habits.id, {onDelete: 'cascade'}),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),
-    valueBoolean: boolean('value_boolean'),
-    valueNumber: numeric('value_number'),
+  habitId: integer("habit_id")
+    .notNull()
+    .references(() => habits.id, { onDelete: "cascade" }),
+  date: date("date").notNull(),
+  valueBoolean: boolean("value_boolean").notNull(),
 });
