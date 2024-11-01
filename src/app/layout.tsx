@@ -23,8 +23,8 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <HydrateClient>
             <NavBarComponent session={session} />
-            <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-pink-400 to-white to-90%">
-              <div className="container flex flex-col items-center justify-center gap-12 p-8">
+            <main className="flex min-h-screen flex-col items-stretch bg-gradient-to-b from-pink-400 to-white to-90% lg:items-center">
+              <div className="flex flex-col items-stretch justify-center gap-12 px-2 py-6 lg:w-1/2">
                 {session ? children : <h1>Please Sign In</h1>}
               </div>
             </main>

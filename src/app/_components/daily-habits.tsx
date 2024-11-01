@@ -1,15 +1,11 @@
 "use client";
 
-import { PopoverTrigger } from "@radix-ui/react-popover";
-import { Popover, PopoverContent } from "~/components/ui/popover";
-import { cn } from "~/lib/utils";
-import { CalendarIcon } from "@radix-ui/react-icons";
 import { api } from "~/trpc/react";
-import { Button } from "~/components/ui/button";
-import { format } from "date-fns";
-import { Calendar } from "~/components/ui/calendar";
 import useDate from "~/hooks/useDate";
 import { getHabitLogs, type HabitLog } from "~/lib/getHabitLogs";
+import DatePicker from "./date-picker";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Card } from "~/components/ui/card";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
@@ -44,45 +40,30 @@ export function DailyHabits() {
   };
 
   return (
-    <div className="w-full max-w-xs">
-      <Button onClick={decreaseDate}>{"<"}</Button>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-[240px] justify-start text-left font-normal",
-              !date && "text-muted-foreground",
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setExactDate}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-      <Button onClick={increaseDate}>{">"}</Button>
-      {date.toDateString()}
+    <Card className="flex flex-col gap-4 p-4">
+      <DatePicker
+        date={date}
+        increaseDate={increaseDate}
+        decreaseDate={decreaseDate}
+        setExactDate={setExactDate}
+      />
+      <hr />
       {habitLogs.map((habitLog) => (
-        <div
-          className="flex flex-row content-around items-end bg-slate-50"
-          key={habitLog.habitId}
-        >
-          {habitLog.name}
-          <input
-            type="checkbox"
-            checked={habitLog.valueBoolean}
-            onChange={() => onChange(habitLog)}
-          />
-        </div>
+        <>
+          <div
+            className="flex flex-row items-center justify-between p-2 text-base"
+            key={habitLog.habitId}
+          >
+            {habitLog.name}
+            <Checkbox
+              className="h-8 w-8"
+              checked={habitLog.valueBoolean}
+              onCheckedChange={() => onChange(habitLog)}
+            />
+          </div>
+          <hr />
+        </>
       ))}
-    </div>
+    </Card>
   );
 }
