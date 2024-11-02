@@ -26,8 +26,6 @@ export function DailyHabits() {
   const habitLogs = getHabitLogs({
     habits: habitsData,
     logs: logsData,
-    isPending,
-    variables,
   });
 
   const onChange = (habitLog: HabitLog) => {
