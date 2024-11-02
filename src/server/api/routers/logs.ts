@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
 
@@ -8,18 +7,11 @@ export const logRouter = createTRPCRouter({
   getByUserAndDate: protectedProcedure
     .input(z.object({ date: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db
-        .select({
-          id: logs.id,
-          date: logs.date,
-          habitId: logs.habitId,
-          userId: logs.userId,
-          valueBoolean: logs.valueBoolean,
-        })
-        .from(logs)
-        .where(
-          eq(logs.userId, ctx.session.user.id) && eq(logs.date, input.date),
-        );
+      return await ctx.db.query.logs.findMany({
+        where: (logs, { and, eq }) =>
+          and(eq(logs.userId, ctx.session.user.id), eq(logs.date, input.date)),
+        orderBy: (logs, { asc }) => [asc(logs.id)],
+      });
     }),
 
   setLogEntry: protectedProcedure

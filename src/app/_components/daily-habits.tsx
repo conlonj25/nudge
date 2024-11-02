@@ -17,7 +17,7 @@ export function DailyHabits() {
   });
 
   const utils = api.useUtils();
-  const { isPending, variables, mutate } = api.log.setLogEntry.useMutation({
+  const { mutate } = api.log.setLogEntry.useMutation({
     onSuccess: async () => {
       await utils.log.invalidate();
     },

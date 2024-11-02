@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { habits, logs } from "~/server/db/schema";
+import { habits } from "~/server/db/schema";
 
 export const habitRouter = createTRPCRouter({
   create: protectedProcedure
@@ -39,40 +39,10 @@ export const habitRouter = createTRPCRouter({
       await ctx.db.delete(habits).where(eq(habits.id, input.id));
     }),
 
-  getLatest: protectedProcedure.query(async ({ ctx }) => {
-    const habit = await ctx.db.query.habits.findMany({
-      orderBy: (habits, { asc }) => [asc(habits.name)],
-    });
-
-    return habit ?? null;
-  }),
-
-  getByDate: protectedProcedure
-    .input(z.object({ date: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const habit = await ctx.db
-        .select({
-          id: logs.id,
-          habitId: habits.id,
-          name: habits.name,
-          value: logs.valueBoolean,
-        })
-        .from(logs)
-        .where(eq(logs.date, input.date))
-        .leftJoin(habits, eq(logs.habitId, habits.id));
-
-      return habit ?? null;
-    }),
-
   getByUser: protectedProcedure.query(async ({ ctx }) => {
-    const habit = await ctx.db
-      .select({
-        id: habits.id,
-        userId: habits.userId,
-        name: habits.name,
-      })
-      .from(habits)
-      .where(eq(habits.userId, ctx.session.user.id));
-    return habit;
+    return await ctx.db.query.habits.findMany({
+      where: eq(habits.userId, ctx.session.user.id),
+      orderBy: (habits, { asc }) => [asc(habits.id)],
+    });
   }),
 });

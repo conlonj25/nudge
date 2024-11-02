@@ -6,7 +6,7 @@ import AddHabitDialog from "./add-habit-dialog";
 import EditHabitForm from "./edit-habit-form";
 
 export function MyHabits() {
-  const [latestHabits] = api.habit.getLatest.useSuspenseQuery();
+  const [latestHabits] = api.habit.getByUser.useSuspenseQuery();
 
   return (
     <Card className="flex flex-col gap-4 p-4">
