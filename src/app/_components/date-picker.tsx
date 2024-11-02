@@ -24,7 +24,9 @@ const DatePicker = ({
 }: DatePickerProps) => {
   return (
     <div className="flex flex-row justify-center gap-2">
-      <Button onClick={decreaseDate}>{"<"}</Button>
+      <Button variant="outline" onClick={decreaseDate}>
+        {"<"}
+      </Button>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -47,7 +49,9 @@ const DatePicker = ({
           />
         </PopoverContent>
       </Popover>
-      <Button onClick={increaseDate}>{">"}</Button>
+      <Button variant="outline" onClick={increaseDate}>
+        {">"}
+      </Button>
     </div>
   );
 };
