@@ -4,7 +4,6 @@ import { api } from "~/trpc/react";
 import { Card } from "~/components/ui/card";
 import AddHabitDialog from "./add-habit-dialog";
 import EditHabitForm from "./edit-habit-form";
-import DeleteHabitDialog from "./delete-habit-dialog";
 
 export function MyHabits() {
   const [latestHabits] = api.habit.getLatest.useSuspenseQuery();

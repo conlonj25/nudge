@@ -4,8 +4,6 @@ import {
   date,
   index,
   integer,
-  numeric,
-  pgEnum,
   pgTableCreator,
   primaryKey,
   serial,
