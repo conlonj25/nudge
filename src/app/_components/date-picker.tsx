@@ -8,6 +8,7 @@ import {
 } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
 import { format } from "date-fns";
+import { useState } from "react";
 
 type DatePickerProps = {
   date: Date;
@@ -22,12 +23,14 @@ const DatePicker = ({
   decreaseDate,
   setExactDate,
 }: DatePickerProps) => {
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
   return (
     <div className="flex flex-row justify-center gap-2">
       <Button variant="outline" onClick={decreaseDate}>
         {"<"}
       </Button>
-      <Popover>
+      <Popover open={isPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
@@ -35,6 +38,7 @@ const DatePicker = ({
               "w-[240px] justify-start text-left font-normal",
               !date && "text-muted-foreground",
             )}
+            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date ? format(date, "PPP") : <span>Pick a date</span>}
@@ -44,7 +48,10 @@ const DatePicker = ({
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setExactDate}
+            onSelect={(date) => {
+              setIsPopoverOpen(false);
+              setExactDate(date);
+            }}
             initialFocus
           />
         </PopoverContent>
