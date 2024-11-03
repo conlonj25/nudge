@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { type Session } from "next-auth";
 import { usePathname } from "next/navigation";
+import UserAvatar from "~/app/_components/UserAvatar";
 
 type NavBarComponentProps = {
   session: Session | null;
@@ -18,6 +19,14 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
   };
 
   const pathname = usePathname();
+
+  const userImage = session?.user?.image ?? "defaultAvatar.png";
+  const userFallback =
+    session?.user?.name
+      ?.split(" ")
+      .map((s) => s.slice(0, 1))
+      .join("")
+      .toLocaleUpperCase() ?? "U";
 
   return (
     <nav className="border-b border-border bg-background">
@@ -45,17 +54,11 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <Link
-              href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-            >
-              <button
-                type="button"
-                className="block w-full px-4 py-2 text-left text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-              >
-                {session ? "Sign out" : "Sign in"}
-              </button>
-            </Link>
+            <UserAvatar
+              session={session}
+              userImage={userImage}
+              userFallback={userFallback}
+            />
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button
