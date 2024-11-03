@@ -42,7 +42,7 @@ const AddHabitDialog = () => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-row items-center gap-4 rounded-md border-2 p-2"
+        className="flex flex-row items-center gap-2 py-2"
         onSubmit={form.handleSubmit(onSubmitCreate)}
       >
         <FormField
