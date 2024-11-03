@@ -82,12 +82,14 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
             <Link
               href={"/"}
               className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
+              onClick={toggleMenu}
             >
               Today
             </Link>
             <Link
               href={"/habits"}
               className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
+              onClick={toggleMenu}
             >
               Habits
             </Link>
