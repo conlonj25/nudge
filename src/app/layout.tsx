@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { NavBarComponent } from "~/components/nav-bar";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
+import PleaseSignIn from "./_components/please-sign-in";
 
 export const metadata: Metadata = {
   title: "Nudge",
@@ -25,7 +26,7 @@ export default async function RootLayout({
             <NavBarComponent session={session} />
             <main className="flex min-h-screen flex-col items-stretch bg-gradient-to-b from-pink-400 to-white to-90% lg:items-center">
               <div className="flex flex-col items-stretch justify-center gap-12 px-2 py-6 lg:w-1/2">
-                {session ? children : <h1>Please Sign In</h1>}
+                {session ? children : <PleaseSignIn />}
               </div>
             </main>
           </HydrateClient>
