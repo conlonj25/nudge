@@ -1,6 +1,7 @@
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -9,12 +10,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import DeleteHabitForm from "./delete-habit-form";
 import { type Habit } from "../_types";
+import { api } from "~/trpc/react";
+import { cn } from "~/lib/utils";
 
 type DeleteHabitDialogProps = { habit: Habit };
 
 const DeleteHabitDialog = ({ habit }: DeleteHabitDialogProps) => {
+  const utils = api.useUtils();
+
+  const deleteHabit = api.habit.delete.useMutation({
+    onSuccess: async () => {
+      await utils.habit.invalidate();
+    },
+  });
+
+  const onClick = async () => {
+    deleteHabit.mutate({
+      id: habit.id,
+    });
+  };
+
+  console.warn(cn(buttonVariants()));
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -29,7 +47,12 @@ const DeleteHabitDialog = ({ habit }: DeleteHabitDialogProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <DeleteHabitForm habit={habit} />
+          <AlertDialogAction
+            className={cn(buttonVariants({ variant: "destructive" }))}
+            onClick={onClick}
+          >
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
