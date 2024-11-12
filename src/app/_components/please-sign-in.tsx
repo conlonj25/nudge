@@ -6,6 +6,17 @@ import useDate from "~/hooks/useDate";
 import { type HabitLog } from "~/lib/getHabitLogs";
 import { Checkbox } from "~/components/ui/checkbox";
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 
 const PleaseSignIn = () => {
   const { date, increaseDate, decreaseDate, setExactDate } = useDate();
@@ -41,9 +52,25 @@ const PleaseSignIn = () => {
         key={3}
       >
         Track progress on Nudge
-        <Link href="/api/auth/signin">
-          <Checkbox className="h-8 w-8" />
-        </Link>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Checkbox className="h-8 w-8" />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Thank you Kanye, very cool!</AlertDialogTitle>
+              <AlertDialogDescription>
+                Sign in to track your progress
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <Link href="/api/auth/signin">
+                <AlertDialogAction>Sign In</AlertDialogAction>
+              </Link>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <hr />
     </Card>
