@@ -12,15 +12,24 @@ export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
     useDate();
 
+  const queryParams = { date: calendarDate ?? "" };
   const { isPending, data: habitsData } = api.habit.getByUser.useQuery();
-  const { data: logsData } = api.log.getByUserAndDate.useQuery({
-    date: calendarDate ?? "",
+  const { data: logsData } = api.log.getByUserAndDate.useQuery(queryParams, {
+    trpc: { abortOnUnmount: true },
   });
 
   const utils = api.useUtils();
   const { mutate } = api.log.setLogEntry.useMutation({
     onSuccess: async () => {
       await utils.log.invalidate();
+    },
+    onMutate: async (newData) => {
+      await utils.log.getByUserAndDate.cancel();
+      utils.log.getByUserAndDate.setData(queryParams, (oldData) => {
+        return oldData?.map((log) => {
+          return log.habitId === newData.habitId ? { ...log, ...newData } : log;
+        });
+      });
     },
   });
 
