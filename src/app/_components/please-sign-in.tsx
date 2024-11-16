@@ -65,9 +65,9 @@ const PleaseSignIn = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <Link href="/api/auth/signin">
-                <AlertDialogAction>Sign In</AlertDialogAction>
-              </Link>
+              <AlertDialogAction>
+                <Link href="/api/auth/signin">Sign In</Link>
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
