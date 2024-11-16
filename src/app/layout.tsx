@@ -11,7 +11,7 @@ import PleaseSignIn from "./_components/please-sign-in";
 export const metadata: Metadata = {
   title: "Nudge",
   description: "Brick by boring brick",
-  icons: [{ rel: "icon", url: "/star.png" }],
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default async function RootLayout({
@@ -24,7 +24,7 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <HydrateClient>
             <NavBarComponent session={session} />
-            <main className="flex min-h-screen flex-col items-stretch bg-gradient-to-b from-pink-400 to-white to-90% lg:items-center">
+            <main className="flex min-h-screen flex-col items-stretch bg-slate-500 lg:items-center">
               <div className="flex flex-col items-stretch justify-center gap-12 px-2 py-6 lg:w-1/2">
                 {session ? children : <PleaseSignIn />}
               </div>

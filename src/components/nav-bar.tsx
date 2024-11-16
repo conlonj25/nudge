@@ -6,6 +6,7 @@ import Link from "next/link";
 import { type Session } from "next-auth";
 import { usePathname } from "next/navigation";
 import UserAvatar from "~/app/_components/UserAvatar";
+import Image from "next/image";
 
 type NavBarComponentProps = {
   session: Session | null;
@@ -33,7 +34,13 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
-            <div className="flex flex-shrink-0 items-center">
+            <div className="flex flex-shrink-0 items-center gap-4">
+              <Image
+                src="/favicon.ico"
+                width={40}
+                height={40}
+                alt="Nudge the hippo"
+              />
               <span className="text-2xl font-semibold text-foreground">
                 Nudge
               </span>
