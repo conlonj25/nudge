@@ -18,7 +18,6 @@ export function DailyHabits() {
   const { data: logsData } = api.log.getByUserAndDate.useQuery(queryParams, {
     trpc: { abortOnUnmount: true },
   });
-
   const utils = api.useUtils();
   const { mutate } = api.log.setLogEntry.useMutation({
     onSuccess: async () => {
@@ -27,6 +26,9 @@ export function DailyHabits() {
     onMutate: async (newData) => {
       await utils.log.getByUserAndDate.cancel();
       utils.log.getByUserAndDate.setData(queryParams, (oldData) => {
+        if (!oldData?.find((log) => log.habitId === newData.habitId)) {
+          return oldData && [...oldData, { id: 0, userId: "", ...newData }];
+        }
         return oldData?.map((log) => {
           return log.habitId === newData.habitId ? { ...log, ...newData } : log;
         });
