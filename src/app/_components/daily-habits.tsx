@@ -7,6 +7,7 @@ import DatePicker from "./date-picker";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Card } from "~/components/ui/card";
 import ListSkeleton from "./list-skeleton";
+import Link from "next/link";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
@@ -56,6 +57,22 @@ export function DailyHabits() {
         setExactDate={setExactDate}
       />
       <hr />
+      {!isPending && habitLogs.length === 0 && (
+        <>
+          <p className="text-center">
+            {"You don't have any habits right now."}
+          </p>
+          <p className="text-center">
+            <Link
+              className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+              href={"/habits"}
+            >
+              Add some
+            </Link>{" "}
+            to start tracking results.
+          </p>
+        </>
+      )}
       {isPending ? (
         <ListSkeleton />
       ) : (
