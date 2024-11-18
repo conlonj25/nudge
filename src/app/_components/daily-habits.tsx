@@ -21,7 +21,7 @@ export function DailyHabits() {
   const utils = api.useUtils();
   const { mutate } = api.log.setLogEntry.useMutation({
     onSuccess: async () => {
-      await utils.log.invalidate();
+      await utils.log.getByUserAndDate.invalidate();
     },
     onMutate: async (newData) => {
       await utils.log.getByUserAndDate.cancel();
