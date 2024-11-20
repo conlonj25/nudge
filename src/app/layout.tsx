@@ -10,7 +10,7 @@ import PleaseSignIn from "./_components/please-sign-in";
 
 export const metadata: Metadata = {
   title: "Nudge",
-  description: "Brick by boring brick",
+  description: "Tiny changes. Remarkable results.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
