@@ -3,6 +3,12 @@ import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
 
+const currentYear = new Date().getFullYear();
+const firstDay = new Date(currentYear, 0, 1);
+const lastDay = new Date(currentYear, 11, 31);
+
+const a = z.date().parse(firstDay);
+
 export const logRouter = createTRPCRouter({
   getByUserAndDate: protectedProcedure
     .input(z.object({ date: z.string() }))
@@ -11,6 +17,20 @@ export const logRouter = createTRPCRouter({
         where: (logs, { and, eq }) =>
           and(eq(logs.userId, ctx.session.user.id), eq(logs.date, input.date)),
         orderBy: (logs, { asc }) => [asc(logs.id)],
+      });
+    }),
+
+  getByThisYear: protectedProcedure
+    .input(z.object({ habitId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.query.logs.findMany({
+        where: (logs, { and, eq, between }) =>
+          and(
+            eq(logs.userId, ctx.session.user.id),
+            eq(logs.habitId, input.habitId),
+            between(logs.date, "2024-01-01", "2024-12-31"),
+          ),
+        orderBy: (logs, { asc }) => [asc(logs.date)],
       });
     }),
 

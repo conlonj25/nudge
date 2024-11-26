@@ -31,8 +31,6 @@ const DeleteHabitDialog = ({ habit }: DeleteHabitDialogProps) => {
     });
   };
 
-  console.warn(cn(buttonVariants()));
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
