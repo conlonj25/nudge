@@ -6,7 +6,7 @@ import { getHabitLogs, type HabitLog } from "~/lib/getHabitLogs";
 import DatePicker from "./date-picker";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Card } from "~/components/ui/card";
-import ListSkeleton from "./list-skeleton";
+import ListSkeleton from "./skeletons/list-skeleton";
 import Link from "next/link";
 import { HeatMap } from "./heatMap";
 
@@ -22,7 +22,6 @@ export function DailyHabits() {
   const utils = api.useUtils();
   const { mutate } = api.log.setLogEntry.useMutation({
     onSuccess: async () => {
-      
       await utils.log.invalidate();
     },
     onMutate: async (newData) => {

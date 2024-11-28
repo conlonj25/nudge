@@ -1,7 +1,7 @@
 "use client";
 
 import { type ApexOptions } from "apexcharts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import {
   Select,
@@ -49,50 +49,50 @@ const options: ApexOptions = {
 };
 
 export const HeatMap = () => {
-  const [selectedHabitId, setSelectedHabitId] = useState(0);
+  const [selectedHabitIndex, setSelectedHabitIndex] = useState(0);
 
-  const { isPending, data: habitsData } = api.habit.getByUser.useQuery();
+  const { data: habits } = api.habit.getByUser.useQuery();
 
-  useEffect(() => {
-    if (selectedHabitId === 0) {
-      setSelectedHabitId(habitsData?.[0]?.id ?? 0);
-    }
-  }, [habitsData]);
+  const { data: logs } = api.log.getByThisYear.useQuery(
+    {
+      habitId: habits?.[selectedHabitIndex]?.id ?? 0,
+    },
+    { enabled: !!habits },
+  );
 
-  const { data: logs } = api.log.getByThisYear.useQuery({
-    habitId: selectedHabitId,
-  });
-
-  const data1 = logs && interpolateLogsByCurrentYear(logs);
-  const data2 = data1 && formatLogsAsApexSeries({ logs: data1 });
+  const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
+  const logsApexSeries =
+    logsInterpolated && formatLogsAsApexSeries({ logs: logsInterpolated });
 
   return (
     <>
-      <Select
-        onValueChange={(newValue) => {
-          const matchedHabit = habitsData?.find(
-            (habit) => habit.name === newValue,
-          );
-          if (matchedHabit) setSelectedHabitId(matchedHabit.id);
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder={habitsData?.[0]?.name ?? "Habit"} />
-        </SelectTrigger>
-        <SelectContent>
-          {habitsData?.map((habit) => (
-            <SelectItem key={habit.id} value={habit.name}>
-              {habit.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-row justify-end">
+        <Select
+          onValueChange={(newValue) => {
+            const matchedHabit = habits?.findIndex(
+              (habit) => habit.name === newValue,
+            );
+            if (matchedHabit) setSelectedHabitIndex(matchedHabit);
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder={habits?.[0]?.name ?? "Habit"} />
+          </SelectTrigger>
+          <SelectContent>
+            {habits?.map((habit) => (
+              <SelectItem key={habit.id} value={habit.name}>
+                {habit.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <ReactApexChart
         options={options}
-        series={data2 ?? []}
+        series={logsApexSeries ?? []}
         type="heatmap"
-        height="200"
+        height="225"
       />
     </>
   );
