@@ -64,3 +64,16 @@ export const interpolateLogsByCurrentYear = (logs: Log[]) => {
     endDate: lastDayOfCurrentYear,
   });
 };
+
+export const interpolateLogsByLastThreeMonths = (logs: Log[]) => {
+  const today = new Date();
+  const todayMinusThreeMonths = new Date(
+    new Date(today).setMonth(today.getMonth() - 3),
+  );
+
+  return interpolateLogs({
+    logs: logs,
+    startDate: todayMinusThreeMonths,
+    endDate: today,
+  });
+};

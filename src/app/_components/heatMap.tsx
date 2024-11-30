@@ -11,7 +11,10 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { formatLogsAsApexSeries } from "~/lib/formatData";
-import { interpolateLogsByCurrentYear } from "~/lib/interpolateLogs";
+import {
+  interpolateLogsByCurrentYear,
+  interpolateLogsByLastThreeMonths,
+} from "~/lib/interpolateLogs";
 import { api } from "~/trpc/react";
 
 const options: ApexOptions = {
@@ -61,8 +64,11 @@ export const HeatMap = () => {
   );
 
   const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
+  const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
   const logsApexSeries =
     logsInterpolated && formatLogsAsApexSeries({ logs: logsInterpolated });
+  const logsMiniApexSeries =
+    logsThreeMonths && formatLogsAsApexSeries({ logs: logsThreeMonths });
 
   return (
     <>
@@ -88,12 +94,23 @@ export const HeatMap = () => {
         </Select>
       </div>
 
-      <ReactApexChart
-        options={options}
-        series={logsApexSeries ?? []}
-        type="heatmap"
-        height="225"
-      />
+      <div className="hidden md:block">
+        <ReactApexChart
+          options={{ ...options, title: { text: "This year" } }}
+          series={logsApexSeries ?? []}
+          type="heatmap"
+          height="225"
+        />
+      </div>
+
+      <div className="md:hidden">
+        <ReactApexChart
+          options={{ ...options, title: { text: "Last Three Months" } }}
+          series={logsMiniApexSeries ?? []}
+          type="heatmap"
+          height="225"
+        />
+      </div>
     </>
   );
 };
