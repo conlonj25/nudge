@@ -63,6 +63,13 @@ export const HeatMap = () => {
     { enabled: !!habits },
   );
 
+  const utils = api.useUtils();
+  if (habits) {
+    habits.forEach((habit) => {
+      void utils.log.getByThisYear.prefetch({ habitId: habit.id });
+    });
+  }
+
   const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
   const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
   const logsApexSeries =
