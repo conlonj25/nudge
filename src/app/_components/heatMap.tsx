@@ -75,10 +75,11 @@ export const HeatMap = () => {
       <div className="flex flex-row justify-end">
         <Select
           onValueChange={(newValue) => {
-            const matchedHabit = habits?.findIndex(
+            const matchedHabitIndex = habits?.findIndex(
               (habit) => habit.name === newValue,
             );
-            if (matchedHabit) setSelectedHabitIndex(matchedHabit);
+            if (matchedHabitIndex !== undefined)
+              setSelectedHabitIndex(matchedHabitIndex);
           }}
         >
           <SelectTrigger className="w-[180px]">
