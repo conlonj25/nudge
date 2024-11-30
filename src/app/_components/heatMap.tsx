@@ -19,7 +19,6 @@ import { api } from "~/trpc/react";
 
 const options: ApexOptions = {
   chart: {
-    height: "100px",
     type: "heatmap",
   },
   plotOptions: {
@@ -48,6 +47,20 @@ const options: ApexOptions = {
   },
   title: {
     text: "Progress this year",
+  },
+  legend: {
+    show: false,
+  },
+  tooltip: {
+    enabled: false,
+  },
+  xaxis: {
+    labels: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
   },
 };
 
@@ -102,21 +115,21 @@ export const HeatMap = () => {
         </Select>
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden aspect-[4.4] md:block">
         <ReactApexChart
           options={{ ...options, title: { text: "This year" } }}
           series={logsApexSeries ?? []}
           type="heatmap"
-          height="225"
+          height="100%"
         />
       </div>
 
-      <div className="md:hidden">
+      <div className="aspect-[1.6] md:hidden">
         <ReactApexChart
           options={{ ...options, title: { text: "Last Three Months" } }}
           series={logsMiniApexSeries ?? []}
           type="heatmap"
-          height="225"
+          height="100%"
         />
       </div>
     </>

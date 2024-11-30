@@ -3226,5 +3226,4 @@ const yearly = {
 
 it("should", () => {
   const a = formatLogsAsApexSeries(yearly);
-  console.log(a);
 });

@@ -30,7 +30,6 @@ export const formatLogsAsApexSeries: FormatLogsAsApexSeries = ({ logs }) => {
   });
 
   template.slice(lastLogDayIndex + 1).forEach((el) => el.push(0));
-  template.forEach((el) => console.log(el.length));
 
   const templateWithLabels = template.reduce(
     (acc, cv, i) => ({ ...acc, [DAYS_OF_THE_WEEK[i] as string]: cv }),
