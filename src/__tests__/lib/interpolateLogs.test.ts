@@ -1,4 +1,4 @@
-import { test } from "vitest";
+import { it, test } from "vitest";
 import { interpolateLogsByThisYear } from "~/lib/interpolateLogs";
 
 const logs = [
@@ -80,3 +80,7 @@ const logs = [
     valueBoolean: true,
   },
 ];
+
+it("should", () => {
+  interpolateLogsByThisYear(logs);
+});
