@@ -8,6 +8,7 @@ import { type Habit, type Log } from "~/app/_types";
 import { useEffect, useState } from "react";
 import { toISOStringShort } from "~/lib/getDayOfTheWeek";
 import DatePicker from "./date-picker";
+import { PlaygroundHeatMap } from "./playground-heat-map";
 
 const createEmptyLogsForDate = (habits: Habit[], d: Date): Log[] => {
   return habits.map((habit) => {
@@ -36,9 +37,9 @@ const mergeLogs = (oldLogs: Log[], newLogs: Log[]): Log[] => {
 };
 
 const habits: Habit[] = [
-  { id: 1, name: "Journal", userId: "1" },
-  { id: 2, name: "10,000 Steps", userId: "1" },
-  { id: 3, name: "Log progress on Nudge", userId: "1" },
+  { id: 0, name: "Journal", userId: "1" },
+  { id: 1, name: "10,000 Steps", userId: "1" },
+  { id: 2, name: "Log progress on Nudge", userId: "1" },
 ];
 
 const PlaygroundDailyHabits = () => {
@@ -108,6 +109,9 @@ const PlaygroundDailyHabits = () => {
             <hr />
           </>
         ))}
+      </Card>
+      <Card className="flex flex-col gap-4 p-4">
+        <PlaygroundHeatMap habits={habits} logs={logs} />
       </Card>
     </>
   );
