@@ -115,7 +115,7 @@ export const HeatMap = () => {
         </Select>
       </div>
 
-      <div className="hidden aspect-[4.4] md:block">
+      <div className="hidden aspect-[5] md:block">
         <ReactApexChart
           options={{ ...options, title: { text: "This year" } }}
           series={logsApexSeries ?? []}

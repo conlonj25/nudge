@@ -8,7 +8,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Card } from "~/components/ui/card";
 import ListSkeleton from "./skeletons/list-skeleton";
 import Link from "next/link";
-import { HeatMap } from "./heatMap";
+import { HeatMap } from "./heat-map";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =

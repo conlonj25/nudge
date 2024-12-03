@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { NavBarComponent } from "~/components/nav-bar";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import PleaseSignIn from "./_components/please-sign-in";
+import PlaygroundDailyHabits from "./_components/playground-daily-habits";
 
 export const metadata: Metadata = {
   title: "Nudge",
@@ -26,7 +26,7 @@ export default async function RootLayout({
             <NavBarComponent session={session} />
             <main className="flex min-h-screen flex-col items-stretch bg-slate-500 lg:items-center">
               <div className="flex flex-col items-stretch justify-center gap-6 px-2 py-6 lg:w-1/2">
-                {session ? children : <PleaseSignIn />}
+                {session ? children : <PlaygroundDailyHabits />}
               </div>
             </main>
           </HydrateClient>
