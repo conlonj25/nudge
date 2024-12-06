@@ -9,7 +9,7 @@ import { Fragment, useEffect, useState } from "react";
 import { toISOStringShort } from "~/lib/getDayOfTheWeek";
 import DatePicker from "./date-picker";
 import { PlaygroundHeatMap } from "./playground-heat-map";
-import { seedLogsByCurrentYear } from "~/lib/interpolateLogs";
+import { mergeLogs } from "~/lib/logManipulations";
 
 const createEmptyLogsForDate = (habits: Habit[], d: Date): Log[] => {
   return habits.map((habit) => {
@@ -23,20 +23,6 @@ const createEmptyLogsForDate = (habits: Habit[], d: Date): Log[] => {
   });
 };
 
-const mergeLogs = (oldLogs: Log[], newLogs: Log[]): Log[] => {
-  const oldLogsWithUniqueKeys = oldLogs.reduce(
-    (acc, cv) => ({ ...acc, [`${cv.date}[${cv.habitId}]`]: cv }),
-    {},
-  );
-
-  const newLogsWithUniqueKeys = newLogs.reduce(
-    (acc, cv) => ({ ...acc, [`${cv.date}[${cv.habitId}]`]: cv }),
-    {},
-  );
-
-  return Object.values({ ...oldLogsWithUniqueKeys, ...newLogsWithUniqueKeys });
-};
-
 const habits: Habit[] = [
   { id: 0, name: "Journal", userId: "1" },
   { id: 1, name: "10,000 Steps", userId: "1" },
@@ -46,7 +32,7 @@ const habits: Habit[] = [
 const PlaygroundDailyHabits = () => {
   const { date, increaseDate, decreaseDate, setExactDate } = useDate();
 
-  const [logs, setLogs] = useState<Log[]>(seedLogsByCurrentYear(habits));
+  const [logs, setLogs] = useState<Log[]>([]);
 
   useEffect(() => {
     const emptyLogs = createEmptyLogsForDate(habits, date);

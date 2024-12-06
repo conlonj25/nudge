@@ -11,11 +11,11 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { formatLogsAsApexSeries } from "~/lib/formatData";
+import { type Habit, type Log } from "../_types";
 import {
   interpolateLogsByCurrentYear,
   interpolateLogsByLastThreeMonths,
-} from "~/lib/interpolateLogs";
-import { type Habit, type Log } from "../_types";
+} from "~/lib/logManipulations";
 
 const options: ApexOptions = {
   chart: {
@@ -79,12 +79,19 @@ export const PlaygroundHeatMap = ({
     (log) => log.habitId === selectedHabitIndex,
   );
 
-  const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
-  const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
+  const logsInterpolated = logs && interpolateLogsByCurrentYear(habits, logs);
+
+  const logsThreeMonths =
+    logs && interpolateLogsByLastThreeMonths(habits, logs);
+
   const logsApexSeries =
-    logsInterpolated && formatLogsAsApexSeries({ logs: logsInterpolated });
+    logsInterpolated &&
+    formatLogsAsApexSeries({
+      logs: logsInterpolated[selectedHabitIndex] ?? [],
+    });
   const logsMiniApexSeries =
-    logsThreeMonths && formatLogsAsApexSeries({ logs: logsThreeMonths });
+    logsThreeMonths &&
+    formatLogsAsApexSeries({ logs: logsThreeMonths[selectedHabitIndex] ?? [] });
 
   return (
     <>

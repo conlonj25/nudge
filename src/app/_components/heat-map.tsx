@@ -14,7 +14,8 @@ import { formatLogsAsApexSeries } from "~/lib/formatData";
 import {
   interpolateLogsByCurrentYear,
   interpolateLogsByLastThreeMonths,
-} from "~/lib/interpolateLogs";
+} from "~/lib/logManipulations";
+
 import { api } from "~/trpc/react";
 
 const options: ApexOptions = {
