@@ -1,4 +1,4 @@
-import { type Log } from "~/app/_types";
+import { type Habit, type Log } from "~/app/_types";
 
 const getListOfDatesInRange = function (startDate: Date, endDate: Date) {
   const arr = [];
@@ -12,12 +12,47 @@ const getListOfDatesInRange = function (startDate: Date, endDate: Date) {
   return arr.map((v) => v.toISOString().slice(0, 10));
 };
 
+type SeedLogsOptions = {
+  startDate: Date;
+  endDate: Date;
+  habits: Habit[];
+};
+type SeedLogs = (options: SeedLogsOptions) => Log[];
+
 type InterpolateLogsOptions = {
   logs: Log[];
   startDate: Date;
   endDate: Date;
 };
 type InterpolateLogs = (options: InterpolateLogsOptions) => Log[];
+
+export const seedLogs: SeedLogs = ({ startDate, endDate, habits }) => {
+  const listOfDatesInRange = getListOfDatesInRange(startDate, endDate);
+
+  return habits
+    .map((habit) =>
+      listOfDatesInRange.map((date) => ({
+        id: 1,
+        userId: "1",
+        habitId: habit.id,
+        date,
+        valueBoolean: Math.random() >= 0.5,
+      })),
+    )
+    .reduce((acc, cv) => [...acc, ...cv], []);
+};
+
+export const seedLogsByCurrentYear = (habits: Habit[]) => {
+  const currentYear = new Date().getFullYear();
+  const firstDayOfCurrentYear = new Date(currentYear, 0, 1, 12);
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+  return seedLogs({
+    startDate: firstDayOfCurrentYear,
+    endDate: yesterday,
+    habits,
+  });
+};
 
 export const interpolateLogs: InterpolateLogs = ({
   logs,

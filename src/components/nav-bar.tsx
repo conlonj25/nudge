@@ -21,7 +21,7 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
 
   const pathname = usePathname();
 
-  const userImage = session?.user?.image ?? "defaultAvatar.png";
+  const userImage = session?.user?.image ?? "";
   const userFallback =
     session?.user?.name
       ?.split(" ")

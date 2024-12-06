@@ -5,10 +5,11 @@ import useDate from "~/hooks/useDate";
 import { getHabitLogs, type HabitLog } from "~/lib/getHabitLogs";
 import { Checkbox } from "~/components/ui/checkbox";
 import { type Habit, type Log } from "~/app/_types";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { toISOStringShort } from "~/lib/getDayOfTheWeek";
 import DatePicker from "./date-picker";
 import { PlaygroundHeatMap } from "./playground-heat-map";
+import { seedLogsByCurrentYear } from "~/lib/interpolateLogs";
 
 const createEmptyLogsForDate = (habits: Habit[], d: Date): Log[] => {
   return habits.map((habit) => {
@@ -45,7 +46,7 @@ const habits: Habit[] = [
 const PlaygroundDailyHabits = () => {
   const { date, increaseDate, decreaseDate, setExactDate } = useDate();
 
-  const [logs, setLogs] = useState<Log[]>(createEmptyLogsForDate(habits, date));
+  const [logs, setLogs] = useState<Log[]>(seedLogsByCurrentYear(habits));
 
   useEffect(() => {
     const emptyLogs = createEmptyLogsForDate(habits, date);
@@ -94,11 +95,8 @@ const PlaygroundDailyHabits = () => {
         />
         <hr />
         {habitLogs.map((habitLog, i) => (
-          <>
-            <div
-              className="flex h-6 flex-row items-center justify-between p-2 text-base"
-              key={`habitLog[${i}]`}
-            >
+          <Fragment key={`habitLog[${i}]`}>
+            <div className="flex h-6 flex-row items-center justify-between p-2 text-base">
               {habitLog.name}
               <Checkbox
                 className="h-8 w-8"
@@ -107,7 +105,7 @@ const PlaygroundDailyHabits = () => {
               />
             </div>
             <hr />
-          </>
+          </Fragment>
         ))}
       </Card>
       <Card className="flex flex-col gap-4 p-4">
