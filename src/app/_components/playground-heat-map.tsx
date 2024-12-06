@@ -89,6 +89,7 @@ export const PlaygroundHeatMap = ({
     formatLogsAsApexSeries({
       logs: logsInterpolated[selectedHabitIndex] ?? [],
     });
+
   const logsMiniApexSeries =
     logsThreeMonths &&
     formatLogsAsApexSeries({ logs: logsThreeMonths[selectedHabitIndex] ?? [] });

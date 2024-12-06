@@ -1,4 +1,5 @@
 import { type FormattedLogs, type Habit, type Log } from "~/app/_types";
+import { dayGTE, dayLTE } from "./date";
 
 // Formatting
 
@@ -38,6 +39,23 @@ export const mergeFormattedLogs = (
     return {
       ...acc,
       [cv.id]: mergeLogs(oldLogs[cv.id] ?? [], newLogs[cv.id] ?? []),
+    };
+  }, {});
+};
+
+export const trimFormattedLogs = (
+  logs: FormattedLogs,
+  startDate: Date,
+  endDate: Date,
+): FormattedLogs => {
+  return Object.entries(logs).reduce((acc, [k, v]) => {
+    return {
+      ...acc,
+      [k]: v.filter(
+        (log) =>
+          dayGTE(new Date(log.date), startDate) &&
+          dayLTE(new Date(log.date), endDate),
+      ),
     };
   }, {});
 };
@@ -83,12 +101,17 @@ export const interpolateLogs: InterpolateLogs = ({
 }) => {
   const baseObject = formatLogs(habits, []);
   const existingFormattedLogs = formatLogs(habits, logs);
+  const existingTrimmedFormattedLogs = trimFormattedLogs(
+    existingFormattedLogs,
+    startDate,
+    endDate,
+  );
 
   const dummyLogs = Object.entries(baseObject).reduce((acc, [k]) => {
     return { ...acc, [k]: createDummyLogs(Number(k), startDate, endDate) };
   }, {});
 
-  return mergeFormattedLogs(habits, dummyLogs, existingFormattedLogs);
+  return mergeFormattedLogs(habits, dummyLogs, existingTrimmedFormattedLogs);
 };
 
 export const interpolateLogsByCurrentYear = (habits: Habit[], logs: Log[]) => {
