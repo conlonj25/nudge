@@ -2,10 +2,9 @@
 
 import { Card } from "~/components/ui/card";
 import useDate from "~/hooks/useDate";
-import { getHabitLogs, type HabitLog } from "~/lib/getHabitLogs";
 import { Checkbox } from "~/components/ui/checkbox";
-import { type Habit, type Log } from "~/app/_types";
-import { Fragment, useEffect, useState } from "react";
+import { type Habit } from "~/app/_types";
+import { Fragment, useState } from "react";
 import DatePicker from "./date-picker";
 import { PlaygroundHeatMap } from "./playground-heat-map";
 import {

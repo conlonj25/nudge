@@ -8,7 +8,7 @@ import {
 } from "./date";
 import {
   DAYS_OF_THE_WEEK,
-  DaysOfTheWeek,
+  type DaysOfTheWeek,
   getDayStartingMonday,
 } from "./getDayOfTheWeek";
 

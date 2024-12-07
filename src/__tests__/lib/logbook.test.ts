@@ -1,4 +1,4 @@
-import { expect, it } from "vitest";
+import { it } from "vitest";
 import { type Habit } from "~/app/_types";
 import {
   createLogBookWithRandomValuesWithRange,

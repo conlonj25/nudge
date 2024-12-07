@@ -3,12 +3,6 @@ import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
 
-const currentYear = new Date().getFullYear();
-const firstDay = new Date(currentYear, 0, 1);
-const lastDay = new Date(currentYear, 11, 31);
-
-const a = z.date().parse(firstDay);
-
 export const logRouter = createTRPCRouter({
   getByUserAndDate: protectedProcedure
     .input(z.object({ date: z.string() }))

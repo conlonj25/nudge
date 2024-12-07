@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { type Habit } from "../_types";
-import { formatLogMapAsApexSeries, LogBook } from "~/lib/logbook";
+import { formatLogMapAsApexSeries, type LogBook } from "~/lib/logbook";
 import { heatMapOptions } from "~/constants/apexOptions";
 
 type PlaygroundHeatMapProps = {
