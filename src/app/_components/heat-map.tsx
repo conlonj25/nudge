@@ -1,6 +1,5 @@
 "use client";
 
-import { type ApexOptions } from "apexcharts";
 import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import {
@@ -15,7 +14,7 @@ import { formatLogsAsApexSeries } from "~/lib/formatData";
 import {
   interpolateLogsByCurrentYear,
   interpolateLogsByLastThreeMonths,
-} from "~/lib/logManipulations";
+} from "~/lib/interpolateLogs";
 
 import { api } from "~/trpc/react";
 
@@ -38,10 +37,8 @@ export const HeatMap = () => {
     });
   }
 
-  const logsInterpolated =
-    logs && interpolateLogsByCurrentYear(habits ?? [], logs);
-  const logsThreeMonths =
-    logs && interpolateLogsByLastThreeMonths(habits ?? [], logs);
+  const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
+  const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
   const logsApexSeries =
     logsInterpolated && formatLogsAsApexSeries({ logs: logsInterpolated });
   const logsMiniApexSeries =
