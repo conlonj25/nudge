@@ -1,6 +1,5 @@
 "use client";
 
-import { type ApexOptions } from "apexcharts";
 import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import {
@@ -10,89 +9,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { formatLogsAsApexSeries } from "~/lib/formatData";
-import { type Habit, type Log } from "../_types";
-import {
-  interpolateLogsByCurrentYear,
-  interpolateLogsByLastThreeMonths,
-} from "~/lib/logManipulations";
-
-const options: ApexOptions = {
-  chart: {
-    type: "heatmap",
-  },
-  plotOptions: {
-    heatmap: {
-      radius: 4,
-      colorScale: {
-        ranges: [
-          {
-            from: 0,
-            to: 0,
-            color: "#d1d5db",
-            name: " ",
-          },
-          {
-            from: 1,
-            to: 1,
-            color: "#16a34a",
-            name: " ",
-          },
-        ],
-      },
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  title: {
-    text: "Progress this year",
-  },
-  legend: {
-    show: false,
-  },
-  tooltip: {
-    enabled: false,
-  },
-  xaxis: {
-    labels: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-};
+import { type Habit } from "../_types";
+import { formatLogMapAsApexSeries, LogBook } from "~/lib/logbook";
+import { heatMapOptions } from "~/constants/apexOptions";
 
 type PlaygroundHeatMapProps = {
   habits: Habit[];
-  logs: Log[];
+  logBook: LogBook;
 };
 
 export const PlaygroundHeatMap = ({
   habits,
-  logs: unfilteredLogs,
+  logBook,
 }: PlaygroundHeatMapProps) => {
-  const [selectedHabitIndex, setSelectedHabitIndex] = useState(0);
+  const keys = Object.keys(logBook);
+  const [selectedHabitIndex, setSelectedHabitIndex] = useState(keys[0] ?? "0");
 
-  const logs = unfilteredLogs.filter(
-    (log) => log.habitId === selectedHabitIndex,
-  );
+  const logMap = logBook[selectedHabitIndex];
 
-  const logsInterpolated = logs && interpolateLogsByCurrentYear(habits, logs);
-
-  const logsThreeMonths =
-    logs && interpolateLogsByLastThreeMonths(habits, logs);
-
-  const logsApexSeries =
-    logsInterpolated &&
-    formatLogsAsApexSeries({
-      logs: logsInterpolated[selectedHabitIndex] ?? [],
-    });
-
-  const logsMiniApexSeries =
-    logsThreeMonths &&
-    formatLogsAsApexSeries({ logs: logsThreeMonths[selectedHabitIndex] ?? [] });
+  const logMapApexSeries = logMap && formatLogMapAsApexSeries(logMap);
 
   return (
     <>
@@ -103,7 +38,7 @@ export const PlaygroundHeatMap = ({
               (habit) => habit.name === newValue,
             );
             if (matchedHabitIndex !== undefined)
-              setSelectedHabitIndex(matchedHabitIndex);
+              setSelectedHabitIndex(String(matchedHabitIndex));
           }}
         >
           <SelectTrigger className="w-1/3">
@@ -121,21 +56,21 @@ export const PlaygroundHeatMap = ({
 
       <div className="hidden aspect-[5] md:block">
         <ReactApexChart
-          options={{ ...options, title: { text: "This year" } }}
-          series={logsApexSeries ?? []}
+          options={{ ...heatMapOptions, title: { text: "This year" } }}
+          series={logMapApexSeries ?? []}
           type="heatmap"
           height="100%"
         />
       </div>
 
-      <div className="aspect-[1.6] md:hidden">
+      {/* <div className="aspect-[1.6] md:hidden">
         <ReactApexChart
           options={{ ...options, title: { text: "Last Three Months" } }}
           series={logsMiniApexSeries ?? []}
           type="heatmap"
           height="100%"
         />
-      </div>
+      </div> */}
     </>
   );
 };
