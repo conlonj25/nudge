@@ -1,5 +1,13 @@
 import { DAYS_OF_THE_WEEK } from "~/constants/dates";
-import { getDayStartingMonday, getListOfDatesInRange } from "./dates";
+import {
+  firstDayOfThisYearNoon,
+  getDayStartingMonday,
+  getListOfDatesInRange,
+  lastDayOfThisYearNoon,
+  shortISOToDate,
+  todayMinusThreeMonthsNoon,
+  todayNoon,
+} from "./dates";
 import { type Habit, type Log, type DaysOfTheWeek } from "~/types";
 
 export const formatLogsAsApexSeries = (logs: Log[]): ApexAxisChartSeries => {
@@ -10,18 +18,22 @@ export const formatLogsAsApexSeries = (logs: Log[]): ApexAxisChartSeries => {
 
   const template: number[][] = [[], [], [], [], [], [], []];
 
-  const firstLogDayIndex = getDayStartingMonday(new Date(firstLog.date));
-  const lastLogDayIndex = getDayStartingMonday(new Date(lastLog.date));
+  const firstLogDayIndex = getDayStartingMonday(shortISOToDate(firstLog.date));
+  const lastLogDayIndex = getDayStartingMonday(shortISOToDate(lastLog.date));
 
-  template.slice(0, firstLogDayIndex).forEach((el) => el.push(0));
+  for (let i = 0; i < firstLogDayIndex; i++) {
+    template[i]?.push(0);
+  }
 
   logs.forEach((log) => {
-    template[getDayStartingMonday(new Date(log.date))]?.push(
+    template[getDayStartingMonday(shortISOToDate(log.date))]?.push(
       log.valueBoolean ? 1 : 0,
     );
   });
 
-  template.slice(lastLogDayIndex + 1).forEach((el) => el.push(0));
+  for (let i = lastLogDayIndex + 1; i < 7; i++) {
+    template[i]?.push(0);
+  }
 
   const templateWithLabels = template.reduce(
     (acc, cv, i) => ({ ...acc, [DAYS_OF_THE_WEEK[i] as string]: cv }),
@@ -108,18 +120,13 @@ export const interpolateLogs = (
 };
 
 export const interpolateLogsByCurrentYear = (logs: Log[]) => {
-  const currentYear = new Date().getFullYear();
-  const firstDayOfCurrentYear = new Date(currentYear, 0, 1, 12);
-  const lastDayOfCurrentYear = new Date(currentYear, 11, 31, 12);
-
-  return interpolateLogs(logs, firstDayOfCurrentYear, lastDayOfCurrentYear);
+  return interpolateLogs(
+    logs,
+    firstDayOfThisYearNoon(),
+    lastDayOfThisYearNoon(),
+  );
 };
 
 export const interpolateLogsByLastThreeMonths = (logs: Log[]) => {
-  const today = new Date();
-  const todayMinusThreeMonths = new Date(
-    new Date(today).setMonth(today.getMonth() - 3),
-  );
-
-  return interpolateLogs(logs, todayMinusThreeMonths, today);
+  return interpolateLogs(logs, todayMinusThreeMonthsNoon(), todayNoon());
 };

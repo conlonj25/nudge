@@ -12,6 +12,7 @@ import {
   yesterdayNoon,
   dateToShortISO,
   getDayStartingMonday,
+  shortISOToDate,
 } from "./dates";
 
 export const createLogMapBookWithRange = (
@@ -120,16 +121,22 @@ export const formatLogMapAsApexSeries = (logMap: LogMap) => {
 
   const template: number[][] = [[], [], [], [], [], [], []];
 
-  const firstLogDayIndex = getDayStartingMonday(new Date(firstLog[0]));
-  const lastLogDayIndex = getDayStartingMonday(new Date(lastLog[0]));
+  const firstLogDayIndex = getDayStartingMonday(shortISOToDate(firstLog[0]));
+  const lastLogDayIndex = getDayStartingMonday(shortISOToDate(lastLog[0]));
 
-  template.slice(0, firstLogDayIndex).forEach((el) => el.push(0));
+  for (let i = 0; i < firstLogDayIndex; i++) {
+    template[i]?.push(0);
+  }
 
   data.forEach((log) => {
-    template[getDayStartingMonday(new Date(log[0]))]?.push(log[1] ? 1 : 0);
+    template[getDayStartingMonday(shortISOToDate(log[0]))]?.push(
+      log[1] ? 1 : 0,
+    );
   });
 
-  template.slice(lastLogDayIndex + 1).forEach((el) => el.push(0));
+  for (let i = lastLogDayIndex + 1; i < 7; i++) {
+    template[i]?.push(0);
+  }
 
   const templateWithLabels = template.reduce(
     (acc, cv, i) => ({ ...acc, [DAYS_OF_THE_WEEK[i] as string]: cv }),

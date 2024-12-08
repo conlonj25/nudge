@@ -40,6 +40,11 @@ export const yesterdayNoon = () => {
   d.setDate(d.getDate() - 1);
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
 };
+export const todayMinusThreeMonthsNoon = () => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 3);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
+};
 
 export const getDayStartingMonday = (d: Date): number => {
   return (6 + d.getDay()) % 7;

@@ -39,7 +39,8 @@ export const HeatMap = () => {
 
   const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
   const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
-  const logsApexSeries = logsInterpolated && formatLogsAsApexSeries(logs);
+  const logsApexSeries =
+    logsInterpolated && formatLogsAsApexSeries(logsInterpolated);
   const logsMiniApexSeries =
     logsThreeMonths && formatLogsAsApexSeries(logsThreeMonths);
 

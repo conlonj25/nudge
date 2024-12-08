@@ -10,6 +10,7 @@ import Link from "next/link";
 import { HeatMap } from "./heat-map";
 import { getHabitLogs } from "~/lib/logs";
 import { type HabitLog } from "~/types";
+import { Fragment } from "react";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
@@ -17,6 +18,7 @@ export function DailyHabits() {
 
   const queryParams = { date: calendarDate ?? "" };
   const { isPending, data: habitsData } = api.habit.getByUser.useQuery();
+
   const { data: logsData } = api.log.getByUserAndDate.useQuery(queryParams, {
     trpc: { abortOnUnmount: true },
   });
@@ -79,20 +81,21 @@ export function DailyHabits() {
           <ListSkeleton />
         ) : (
           habitLogs.map((habitLog) => (
-            <>
+            <Fragment key={habitLog.logId}>
               <div
+                key={`${habitLog.logId}-name`}
                 className="flex h-6 flex-row items-center justify-between p-2 text-base"
-                key={habitLog.habitId}
               >
                 {habitLog.name}
                 <Checkbox
+                  key={`${habitLog.logId}-checkbox`}
                   className="h-8 w-8"
                   checked={habitLog.valueBoolean}
                   onCheckedChange={() => onChange(habitLog)}
                 />
               </div>
-              <hr />
-            </>
+              <hr key={`${habitLog.logId}-hr`} />
+            </Fragment>
           ))
         )}
       </Card>
