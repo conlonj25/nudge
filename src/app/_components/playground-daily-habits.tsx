@@ -11,7 +11,6 @@ import { defaultPlaygroundHabits } from "~/constants/habits";
 import { dateToShortISO } from "~/lib/dates";
 import {
   createLogMapBookWithSeededValuesForThisYear,
-  sortLogMap,
   mergeLogMapBooks,
 } from "~/lib/logMaps";
 
@@ -21,12 +20,6 @@ const PlaygroundDailyHabits = () => {
   const [logMapBook, setLogMapBook] = useState<LogMapBook>(
     createLogMapBookWithSeededValuesForThisYear(defaultPlaygroundHabits),
   );
-
-  console.warn({ logMapBook });
-  const logMap = logMapBook[0];
-  if (logMap) {
-    console.warn({ sorted: sortLogMap(logMap) });
-  }
 
   const onCheckedChange = (habit: Habit, value: boolean) => {
     const newLogMapBook = {

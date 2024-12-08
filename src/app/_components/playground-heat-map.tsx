@@ -10,7 +10,8 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { heatMapOptions } from "~/constants/apexOptions";
-import { formatLogMapAsApexSeries } from "~/lib/logMaps";
+import { todayMinusThreeMonthsNoon, todayNoon } from "~/lib/dates";
+import { formatLogMapAsApexSeries, trimLogMap } from "~/lib/logMaps";
 import { type LogMapBook, type Habit } from "~/types";
 
 type PlaygroundHeatMapProps = {
@@ -26,8 +27,12 @@ export const PlaygroundHeatMap = ({
   const [selectedHabitIndex, setSelectedHabitIndex] = useState(keys[0] ?? "0");
 
   const logMap = logMapBook[selectedHabitIndex];
+  const logMapThreeMonths =
+    logMap && trimLogMap(logMap, todayMinusThreeMonthsNoon(), todayNoon());
 
   const logMapApexSeries = logMap && formatLogMapAsApexSeries(logMap);
+  const logMapThreeMonthsApexSeries =
+    logMapThreeMonths && formatLogMapAsApexSeries(logMapThreeMonths);
 
   return (
     <>
@@ -63,14 +68,14 @@ export const PlaygroundHeatMap = ({
         />
       </div>
 
-      {/* <div className="aspect-[1.6] md:hidden">
+      <div className="aspect-[1.6] md:hidden">
         <ReactApexChart
-          options={{ ...options, title: { text: "Last Three Months" } }}
-          series={logsMiniApexSeries ?? []}
+          options={{ ...heatMapOptions, title: { text: "Last Three Months" } }}
+          series={logMapThreeMonthsApexSeries ?? []}
           type="heatmap"
           height="100%"
         />
-      </div> */}
+      </div>
     </>
   );
 };
