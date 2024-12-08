@@ -9,23 +9,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { type Habit } from "../_types";
-import { formatLogMapAsApexSeries, type LogBook } from "~/lib/logbook";
 import { heatMapOptions } from "~/constants/apexOptions";
+import { formatLogMapAsApexSeries } from "~/lib/logMaps";
+import { type LogMapBook, type Habit } from "~/types";
 
 type PlaygroundHeatMapProps = {
   habits: Habit[];
-  logBook: LogBook;
+  logMapBook: LogMapBook;
 };
 
 export const PlaygroundHeatMap = ({
   habits,
-  logBook,
+  logMapBook,
 }: PlaygroundHeatMapProps) => {
-  const keys = Object.keys(logBook);
+  const keys = Object.keys(logMapBook);
   const [selectedHabitIndex, setSelectedHabitIndex] = useState(keys[0] ?? "0");
 
-  const logMap = logBook[selectedHabitIndex];
+  const logMap = logMapBook[selectedHabitIndex];
 
   const logMapApexSeries = logMap && formatLogMapAsApexSeries(logMap);
 

@@ -10,9 +10,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import { type Habit } from "../_types";
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { type Habit } from "~/types";
 
 type DeleteHabitDialogProps = { habit: Habit };
 

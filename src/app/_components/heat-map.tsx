@@ -10,11 +10,11 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { heatMapOptions } from "~/constants/apexOptions";
-import { formatLogsAsApexSeries } from "~/lib/formatData";
 import {
   interpolateLogsByCurrentYear,
   interpolateLogsByLastThreeMonths,
-} from "~/lib/interpolateLogs";
+  formatLogsAsApexSeries,
+} from "~/lib/logs";
 
 import { api } from "~/trpc/react";
 
@@ -39,10 +39,9 @@ export const HeatMap = () => {
 
   const logsInterpolated = logs && interpolateLogsByCurrentYear(logs);
   const logsThreeMonths = logs && interpolateLogsByLastThreeMonths(logs);
-  const logsApexSeries =
-    logsInterpolated && formatLogsAsApexSeries({ logs: logsInterpolated });
+  const logsApexSeries = logsInterpolated && formatLogsAsApexSeries(logs);
   const logsMiniApexSeries =
-    logsThreeMonths && formatLogsAsApexSeries({ logs: logsThreeMonths });
+    logsThreeMonths && formatLogsAsApexSeries(logsThreeMonths);
 
   return (
     <>

@@ -2,7 +2,7 @@
 
 import { type SyntheticEvent, useState } from "react";
 import { api } from "~/trpc/react";
-import { type Habit } from "../_types";
+import { type Habit } from "~/types";
 
 type EditHabitDialogProps = { habit: Habit };
 

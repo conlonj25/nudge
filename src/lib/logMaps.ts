@@ -1,81 +1,73 @@
-import { type Habit } from "~/app/_types";
+import { DAYS_OF_THE_WEEK } from "~/constants/dates";
 import {
-  dateToShortISO,
-  firstDayOfThisYearNoon,
+  type LogMapBook,
+  type Habit,
+  type LogMap,
+  type DaysOfTheWeek,
+} from "~/types";
+import {
   getListOfDatesInRange,
+  firstDayOfThisYearNoon,
   lastDayOfThisYearNoon,
   yesterdayNoon,
-} from "./date";
-import {
-  DAYS_OF_THE_WEEK,
-  type DaysOfTheWeek,
+  dateToShortISO,
   getDayStartingMonday,
-} from "./getDayOfTheWeek";
+} from "./dates";
 
-export type LogMap = Map<string, boolean>;
-export type LogBook = Record<string, LogMap>;
-
-export const createLogBookWithNoRange = (habits: Habit[]) => {
-  const logBook: LogBook = habits.reduce(
-    (acc, cv) => ({ ...acc, [cv.id]: new Map<string, boolean>() }),
-    {},
-  );
-
-  return logBook;
-};
-
-export const createLogBookWithRange = (
+export const createLogMapBookWithRange = (
   habits: Habit[],
   startDate: Date,
   endDate: Date,
 ) => {
   const days = getListOfDatesInRange(startDate, endDate);
 
-  const logBook: LogBook = habits.reduce(
+  const logMapBook: LogMapBook = habits.reduce(
     (acc, cv) => ({ ...acc, [cv.id]: new Map<string, boolean>() }),
     {},
   );
 
-  Object.keys(logBook).forEach((key) => {
-    const map = logBook[key];
+  Object.keys(logMapBook).forEach((key) => {
+    const map = logMapBook[key];
     if (map) {
       days.forEach((day) => map.set(day, false));
     }
   });
 
-  return logBook;
+  return logMapBook;
 };
 
-export const createLogBookWithRandomValuesWithRange = (
+export const createLogMapBookWithRandomValuesWithRange = (
   habits: Habit[],
   startDate: Date,
   endDate: Date,
 ) => {
   const days = getListOfDatesInRange(startDate, endDate);
 
-  const logBook: LogBook = habits.reduce(
+  const logMapBook: LogMapBook = habits.reduce(
     (acc, cv) => ({ ...acc, [cv.id]: new Map<string, boolean>() }),
     {},
   );
 
-  Object.keys(logBook).forEach((key) => {
-    const map = logBook[key];
+  Object.keys(logMapBook).forEach((key) => {
+    const map = logMapBook[key];
     if (map) {
       days.forEach((day) => map.set(day, Math.random() < 0.5));
     }
   });
 
-  return logBook;
+  return logMapBook;
 };
 
-export const createLogBookWithSeededValuesForThisYear = (habits: Habit[]) => {
-  return mergeLogBooks(
-    createLogBookWithRange(
+export const createLogMapBookWithSeededValuesForThisYear = (
+  habits: Habit[],
+) => {
+  return mergeLogMapBooks(
+    createLogMapBookWithRange(
       habits,
       firstDayOfThisYearNoon(),
       lastDayOfThisYearNoon(),
     ),
-    createLogBookWithRandomValuesWithRange(
+    createLogMapBookWithRandomValuesWithRange(
       habits,
       firstDayOfThisYearNoon(),
       yesterdayNoon(),
@@ -83,7 +75,7 @@ export const createLogBookWithSeededValuesForThisYear = (habits: Habit[]) => {
   );
 };
 
-export const mergeLogBooks = (oldBook: LogBook, newBook: LogBook) => {
+export const mergeLogMapBooks = (oldBook: LogMapBook, newBook: LogMapBook) => {
   const res = { ...oldBook };
   Object.keys(res).forEach((key) => {
     const oldMap = res[key];

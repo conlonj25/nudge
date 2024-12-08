@@ -1,21 +1,3 @@
-export const dayLTE = (d1: Date, d2: Date) => {
-  const isLTE = d1.getTime() <= d2.getTime();
-  const isSameDay =
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate();
-  return isLTE || isSameDay;
-};
-
-export const dayGTE = (d1: Date, d2: Date) => {
-  const isGTE = d1.getTime() >= d2.getTime();
-  const isSameDay =
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate();
-  return isGTE || isSameDay;
-};
-
 export const dateToShortISO = (d: Date): string => {
   return d.toISOString().slice(0, 10);
 };
@@ -57,4 +39,8 @@ export const yesterdayNoon = () => {
   const d = new Date();
   d.setDate(d.getDate() - 1);
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
+};
+
+export const getDayStartingMonday = (d: Date): number => {
+  return (6 + d.getDay()) % 7;
 };

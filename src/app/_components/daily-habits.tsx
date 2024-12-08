@@ -2,13 +2,14 @@
 
 import { api } from "~/trpc/react";
 import useDate from "~/hooks/useDate";
-import { getHabitLogs, type HabitLog } from "~/lib/getHabitLogs";
 import DatePicker from "./date-picker";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Card } from "~/components/ui/card";
 import ListSkeleton from "./skeletons/list-skeleton";
 import Link from "next/link";
 import { HeatMap } from "./heat-map";
+import { getHabitLogs } from "~/lib/logs";
+import { type HabitLog } from "~/types";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
@@ -37,10 +38,7 @@ export function DailyHabits() {
     },
   });
 
-  const habitLogs = getHabitLogs({
-    habits: habitsData,
-    logs: logsData,
-  });
+  const habitLogs = getHabitLogs(habitsData, logsData);
 
   const onChange = (habitLog: HabitLog) => {
     const newValue = !habitLog.valueBoolean;

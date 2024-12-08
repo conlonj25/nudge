@@ -1,4 +1,4 @@
-import { type Habit } from "~/app/_types";
+import { type Habit } from "~/types";
 
 export const defaultPlaygroundHabits: Habit[] = [
   { id: 0, name: "Journal", userId: "1" },

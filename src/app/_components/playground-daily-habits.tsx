@@ -3,43 +3,39 @@
 import { Card } from "~/components/ui/card";
 import useDate from "~/hooks/useDate";
 import { Checkbox } from "~/components/ui/checkbox";
-import { type Habit } from "~/app/_types";
 import { Fragment, useState } from "react";
 import DatePicker from "./date-picker";
 import { PlaygroundHeatMap } from "./playground-heat-map";
+import { type LogMapBook, type Habit } from "~/types";
+import { defaultPlaygroundHabits } from "~/constants/habits";
+import { dateToShortISO } from "~/lib/dates";
 import {
-  createLogBookWithSeededValuesForThisYear,
-  mergeLogBooks,
+  createLogMapBookWithSeededValuesForThisYear,
   sortLogMap,
-  type LogBook,
-} from "~/lib/logbook";
-import { dateToShortISO } from "~/lib/date";
-
-const habits: Habit[] = [
-  { id: 0, name: "Journal", userId: "1" },
-  { id: 1, name: "10,000 Steps", userId: "1" },
-  { id: 2, name: "Log progress on Nudge", userId: "1" },
-];
+  mergeLogMapBooks,
+} from "~/lib/logMaps";
 
 const PlaygroundDailyHabits = () => {
   const { date, increaseDate, decreaseDate, setExactDate } = useDate();
 
-  const [logBook, setLogBook] = useState<LogBook>(
-    createLogBookWithSeededValuesForThisYear(habits),
+  const [logMapBook, setLogMapBook] = useState<LogMapBook>(
+    createLogMapBookWithSeededValuesForThisYear(defaultPlaygroundHabits),
   );
 
-  console.warn({ logBook });
-  const logMap = logBook[0];
+  console.warn({ logMapBook });
+  const logMap = logMapBook[0];
   if (logMap) {
     console.warn({ sorted: sortLogMap(logMap) });
   }
 
   const onCheckedChange = (habit: Habit, value: boolean) => {
-    const newLogBook = {
+    const newLogMapBook = {
       [habit.id]: new Map([[dateToShortISO(date), !value]]),
     };
 
-    setLogBook((oldLogBook) => mergeLogBooks(oldLogBook, newLogBook));
+    setLogMapBook((oldLogMapBook) =>
+      mergeLogMapBooks(oldLogMapBook, newLogMapBook),
+    );
   };
 
   return (
@@ -52,9 +48,11 @@ const PlaygroundDailyHabits = () => {
           setExactDate={setExactDate}
         />
         <hr />
-        {Object.keys(logBook).map((key) => {
-          const habit = habits.find((habit) => habit.id === Number(key));
-          const value = logBook[key]?.get(dateToShortISO(date)) ?? false;
+        {Object.keys(logMapBook).map((key) => {
+          const habit = defaultPlaygroundHabits.find(
+            (habit) => habit.id === Number(key),
+          );
+          const value = logMapBook[key]?.get(dateToShortISO(date)) ?? false;
           return (
             habit && (
               <Fragment key={`habit[${habit.id}]`}>
@@ -75,7 +73,10 @@ const PlaygroundDailyHabits = () => {
         })}
       </Card>
       <Card className="flex flex-col gap-4 p-4">
-        <PlaygroundHeatMap habits={habits} logBook={logBook} />
+        <PlaygroundHeatMap
+          habits={defaultPlaygroundHabits}
+          logMapBook={logMapBook}
+        />
       </Card>
     </>
   );

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { api } from "~/trpc/react";
-import { type Habit } from "../_types";
 import { z } from "zod";
 import {
   Form,
@@ -16,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import DeleteHabitDialog from "./delete-habit-dialog";
+import { type Habit } from "~/types";
 
 type EditHabitDialogProps = { habit: Habit };
 
