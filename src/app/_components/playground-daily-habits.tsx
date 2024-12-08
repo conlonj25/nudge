@@ -13,6 +13,8 @@ import {
   createLogMapBookWithSeededValuesForThisYear,
   mergeLogMapBooks,
 } from "~/lib/logMaps";
+import { Button } from "~/components/ui/button";
+import { signIn } from "next-auth/react";
 
 const PlaygroundDailyHabits = () => {
   const { date, increaseDate, decreaseDate, setExactDate } = useDate();
@@ -70,6 +72,12 @@ const PlaygroundDailyHabits = () => {
           habits={defaultPlaygroundHabits}
           logMapBook={logMapBook}
         />
+      </Card>
+      <Card className="flex flex-col items-center p-4">
+        <div className="flex flex-row items-center gap-4">
+          <p>Sign in to track your own habits</p>
+          <Button onClick={() => signIn()}>Sign In</Button>
+        </div>
       </Card>
     </>
   );
