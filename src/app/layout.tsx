@@ -7,6 +7,7 @@ import { NavBarComponent } from "~/components/nav-bar";
 import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 import PlaygroundDailyHabits from "./_components/playground-daily-habits";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Nudge",
@@ -31,6 +32,7 @@ export default async function RootLayout({
             </main>
           </HydrateClient>
         </TRPCReactProvider>
+        <Analytics />
       </body>
     </html>
   );
