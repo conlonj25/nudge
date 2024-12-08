@@ -52,12 +52,14 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
               >
                 Today
               </Link>
-              <Link
-                href={"/habits"}
-                className={`inline-flex items-center ${pathname === "/habits" ? "border-b-2 border-primary" : ""} px-1 pt-1 text-sm font-medium text-foreground`}
-              >
-                Habits
-              </Link>
+              {session && (
+                <Link
+                  href={"/habits"}
+                  className={`inline-flex items-center ${pathname === "/habits" ? "border-b-2 border-primary" : ""} px-1 pt-1 text-sm font-medium text-foreground`}
+                >
+                  Habits
+                </Link>
+              )}
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
