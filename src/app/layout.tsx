@@ -26,7 +26,7 @@ export default async function RootLayout({
           <HydrateClient>
             <NavBarComponent session={session} />
             <main className="flex min-h-screen flex-col items-stretch bg-slate-500 lg:items-center">
-              <div className="flex flex-col items-stretch justify-center gap-6 px-2 py-6 lg:w-1/2">
+              <div className="flex flex-col items-stretch justify-center gap-4 px-2 py-4 lg:w-1/2">
                 {session ? children : <PlaygroundDailyHabits />}
               </div>
             </main>
