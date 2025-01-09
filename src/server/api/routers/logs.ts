@@ -2,6 +2,7 @@ import { z } from "zod";
 import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
+import { dateToShortISO, firstDayOfThisYearNoon, lastDayOfThisYearNoon } from "~/lib/dates";
 
 export const logRouter = createTRPCRouter({
   getByUserAndDate: protectedProcedure
@@ -22,7 +23,7 @@ export const logRouter = createTRPCRouter({
           and(
             eq(logs.userId, ctx.session.user.id),
             eq(logs.habitId, input.habitId),
-            between(logs.date, "2024-01-01", "2024-12-31"),
+            between(logs.date, dateToShortISO(firstDayOfThisYearNoon()), dateToShortISO(lastDayOfThisYearNoon())),
           ),
         orderBy: (logs, { asc }) => [asc(logs.date)],
       });

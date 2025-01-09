@@ -27,25 +27,29 @@ export const getListOfDatesInRange = function (startDate: Date, endDate: Date) {
   return arr.map((v) => v.toISOString().slice(0, 10));
 };
 
+export const getDayStartingMonday = (d: Date): number => {
+  return (6 + d.getDay()) % 7;
+};
+
 export const firstDayOfThisYearNoon = () =>
   new Date(new Date().getFullYear(), 0, 1, 12);
+
 export const lastDayOfThisYearNoon = () =>
   new Date(new Date().getFullYear(), 11, 31, 12);
+
 export const todayNoon = () => {
   const d = new Date();
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
 };
+
 export const yesterdayNoon = () => {
   const d = new Date();
   d.setDate(d.getDate() - 1);
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
 };
+
 export const todayMinusThreeMonthsNoon = () => {
   const d = new Date();
   d.setMonth(d.getMonth() - 3);
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12);
-};
-
-export const getDayStartingMonday = (d: Date): number => {
-  return (6 + d.getDay()) % 7;
 };
