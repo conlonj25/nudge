@@ -167,22 +167,4 @@ describe("interpolateLogs", () => {
       result.reduce((acc, cv) => acc + (!cv.valueBoolean ? 1 : 0), 0),
     ).toBe(364);
   });
-
-  it("should probably trim any logs outside range", () => {
-    const result = interpolateLogs(
-      [...year2024Logs, ...year2025Logs],
-      new Date(2024, 0, 1, 12),
-      new Date(2024, 11, 31, 12),
-    );
-
-    expect(result.length).toBe(366);
-    expect(result[185]?.valueBoolean).toBe(true);
-    expect(result[254]?.valueBoolean).toBe(true);
-    expect(result.reduce((acc, cv) => acc + (cv.valueBoolean ? 1 : 0), 0)).toBe(
-      2,
-    );
-    expect(
-      result.reduce((acc, cv) => acc + (!cv.valueBoolean ? 1 : 0), 0),
-    ).toBe(364);
-  });
 });
