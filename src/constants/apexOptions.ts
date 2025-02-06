@@ -3,6 +3,9 @@ import { type ApexOptions } from "apexcharts";
 export const heatMapOptions: ApexOptions = {
   chart: {
     type: "heatmap",
+    toolbar: {
+      show: false,
+    },
   },
   plotOptions: {
     heatmap: {
