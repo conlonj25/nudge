@@ -81,20 +81,16 @@ export function DailyHabits() {
           <ListSkeleton />
         ) : (
           habitLogs.map((habitLog) => (
-            <Fragment key={habitLog.logId}>
-              <div
-                key={`${habitLog.logId}-name`}
-                className="flex h-6 flex-row items-center justify-between p-2 text-base"
-              >
+            <Fragment key={habitLog.habitId}>
+              <div className="flex h-6 flex-row items-center justify-between p-2 text-base">
                 {habitLog.name}
                 <Checkbox
-                  key={`${habitLog.logId}-checkbox`}
                   className="h-8 w-8"
                   checked={habitLog.valueBoolean}
                   onCheckedChange={() => onChange(habitLog)}
                 />
               </div>
-              <hr key={`${habitLog.logId}-hr`} />
+              <hr />
             </Fragment>
           ))
         )}

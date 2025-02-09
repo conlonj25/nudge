@@ -5,21 +5,35 @@ import { Card } from "~/components/ui/card";
 import AddHabitDialog from "./add-habit-dialog";
 import EditHabitForm from "./edit-habit-form";
 import ListSkeleton from "./skeletons/list-skeleton";
+import { Fragment } from "react";
+import { useSession } from "next-auth/react";
 
 export function MyHabits() {
-  const [myHabits, { isPending }] = api.habit.getByUser.useSuspenseQuery();
+  const { isPending, data: myHabits } = api.habit.getByUser.useQuery();
 
-  return isPending ? (
-    <ListSkeleton />
+  if (isPending) {
+    return <ListSkeleton />;
+  }
+
+  return myHabits ? (
+    myHabits.map((habit) => (
+      <Fragment key={habit.id}>
+        <EditHabitForm habit={habit} />
+        <hr />
+      </Fragment>
+    ))
   ) : (
+    <p>You have no habits yet.</p>
+  );
+}
+
+export function MyHabitsContainer() {
+  const { data: session } = useSession();
+
+  return (
     <Card className="flex flex-col gap-4 p-4">
-      {myHabits ? <span>My habits</span> : <p>You have no habits yet.</p>}
-      {myHabits.map((habit) => (
-        <>
-          <EditHabitForm key={habit.id} habit={habit} />
-          <hr />
-        </>
-      ))}
+      <span>My habits</span>
+      {session?.user ? <MyHabits /> : <ListSkeleton />}
       <AddHabitDialog />
     </Card>
   );

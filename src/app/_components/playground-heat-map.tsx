@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import {
   Select,
   SelectContent,
@@ -13,6 +12,11 @@ import { heatMapOptions } from "~/constants/apexOptions";
 import { todayMinusThreeMonthsNoon, todayNoon } from "~/lib/dates";
 import { formatLogMapAsApexSeries, trimLogMap } from "~/lib/logMaps";
 import { type LogMapBook, type Habit } from "~/types";
+import dynamic from "next/dynamic";
+
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 type PlaygroundHeatMapProps = {
   habits: Habit[];
@@ -60,21 +64,28 @@ export const PlaygroundHeatMap = ({
       </div>
 
       <div className="hidden aspect-[5] md:block">
-        <ReactApexChart
-          options={{ ...heatMapOptions, title: { text: "This year" } }}
-          series={logMapApexSeries ?? []}
-          type="heatmap"
-          height="100%"
-        />
+        {ReactApexChart && (
+          <ReactApexChart
+            options={{ ...heatMapOptions, title: { text: "This year" } }}
+            series={logMapApexSeries ?? []}
+            type="heatmap"
+            height="100%"
+          />
+        )}
       </div>
 
       <div className="aspect-[1.6] md:hidden">
-        <ReactApexChart
-          options={{ ...heatMapOptions, title: { text: "Last Three Months" } }}
-          series={logMapThreeMonthsApexSeries ?? []}
-          type="heatmap"
-          height="100%"
-        />
+        {ReactApexChart && (
+          <ReactApexChart
+            options={{
+              ...heatMapOptions,
+              title: { text: "Last Three Months" },
+            }}
+            series={logMapThreeMonthsApexSeries ?? []}
+            type="heatmap"
+            height="100%"
+          />
+        )}
       </div>
     </>
   );

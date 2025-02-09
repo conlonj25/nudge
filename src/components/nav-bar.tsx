@@ -40,6 +40,7 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
                 width={40}
                 height={40}
                 alt="Nudge the hippo"
+                priority={true}
               />
               <span className="text-2xl font-semibold text-foreground">
                 Nudge

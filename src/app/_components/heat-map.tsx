@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import {
   Select,
   SelectContent,
@@ -15,6 +14,11 @@ import {
   interpolateLogsByLastThreeMonths,
   formatLogsAsApexSeries,
 } from "~/lib/logs";
+import dynamic from "next/dynamic";
+
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 import { api } from "~/trpc/react";
 
@@ -70,21 +74,28 @@ export const HeatMap = () => {
       </div>
 
       <div className="hidden aspect-[5] md:block">
-        <ReactApexChart
-          options={{ ...heatMapOptions, title: { text: "This year" } }}
-          series={logsApexSeries ?? []}
-          type="heatmap"
-          height="100%"
-        />
+        {ReactApexChart && (
+          <ReactApexChart
+            options={{ ...heatMapOptions, title: { text: "This year" } }}
+            series={logsApexSeries ?? []}
+            type="heatmap"
+            height="100%"
+          />
+        )}
       </div>
 
       <div className="aspect-[1.6] md:hidden">
-        <ReactApexChart
-          options={{ ...heatMapOptions, title: { text: "Last Three Months" } }}
-          series={logsMiniApexSeries ?? []}
-          type="heatmap"
-          height="100%"
-        />
+        {ReactApexChart && (
+          <ReactApexChart
+            options={{
+              ...heatMapOptions,
+              title: { text: "Last Three Months" },
+            }}
+            series={logsMiniApexSeries ?? []}
+            type="heatmap"
+            height="100%"
+          />
+        )}
       </div>
     </>
   );
