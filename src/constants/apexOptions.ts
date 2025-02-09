@@ -31,9 +31,6 @@ export const heatMapOptions: ApexOptions = {
   dataLabels: {
     enabled: false,
   },
-  title: {
-    text: "Progress this year",
-  },
   legend: {
     show: false,
   },
