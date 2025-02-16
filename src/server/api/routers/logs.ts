@@ -2,7 +2,8 @@ import { z } from "zod";
 import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
-import { dateToShortISO, firstDayOfThisYearNoon, lastDayOfThisYearNoon } from "~/lib/dates";
+import { dateToShortISO, firstDayOfThisYearNoon, lastDayOfThisYearNoon, shortISOToDate } from "~/lib/dates";
+import { interpolateLogs } from "~/lib/logs";
 
 export const logRouter = createTRPCRouter({
   getByUserAndDate: protectedProcedure
@@ -13,6 +14,28 @@ export const logRouter = createTRPCRouter({
           and(eq(logs.userId, ctx.session.user.id), eq(logs.date, input.date)),
         orderBy: (logs, { asc }) => [asc(logs.id)],
       });
+    }),
+
+  getByHabitAndDate: protectedProcedure
+    .input(z.object({
+      habitId: z.number(),
+      startDate: z.date(),
+      endDate: z.date()
+    }))
+    .query(async ({ ctx, input }) => {
+      const sparseLogs = await ctx.db.query.logs.findMany({
+        where: (logs, { and, eq, between }) =>
+          and(
+            eq(logs.habitId, input.habitId),
+            eq(logs.userId, ctx.session.user.id),
+            between(logs.date, dateToShortISO(input.startDate), dateToShortISO(input.endDate))
+          ),
+        orderBy: (logs, { asc }) => [asc(logs.id)],
+      });
+
+      const interpolatedLogs = interpolateLogs(sparseLogs, input.startDate, input.endDate);
+
+      return interpolatedLogs;
     }),
 
   getByThisYear: protectedProcedure

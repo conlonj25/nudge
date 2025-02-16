@@ -7,10 +7,10 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Card } from "~/components/ui/card";
 import ListSkeleton from "./skeletons/list-skeleton";
 import Link from "next/link";
-import { HeatMap } from "./heat-map";
 import { getHabitLogs } from "~/lib/logs";
 import { type HabitLog } from "~/types";
 import { Fragment } from "react";
+import { ThreeMonthHeatMap } from "./charts/three-month-heat-map";
 
 export function DailyHabits() {
   const { date, calendarDate, increaseDate, decreaseDate, setExactDate } =
@@ -95,9 +95,16 @@ export function DailyHabits() {
           ))
         )}
       </Card>
-      <Card className="flex flex-col gap-4 p-4">
-        <HeatMap />
-      </Card>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {habitsData?.map((habit) => (
+          <Card
+            key={habit.id}
+            className="center flex aspect-[2.0] flex-col p-4"
+          >
+            <ThreeMonthHeatMap habit={habit} />
+          </Card>
+        ))}
+      </div>
     </>
   );
 }
