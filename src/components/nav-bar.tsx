@@ -110,7 +110,7 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
           <div className="border-t border-border pb-3 pt-4">
             <div className="mt-3 space-y-1">
               <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
+                href={session ? "/api/auth/signout" : "/auth/login/"}
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
               >
                 <button
