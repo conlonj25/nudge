@@ -11,7 +11,11 @@ export default async function LoginPage() {
     redirect("/");
   }
 
+  console.log("PROVIDERS");
+
   const providers = await getProviders();
+
+  console.log({ providers });
 
   return (
     <Card className="flex flex-col items-center gap-4 p-8">
