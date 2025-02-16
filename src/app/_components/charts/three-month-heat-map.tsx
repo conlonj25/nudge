@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { api } from "~/trpc/react";
 import { type Habit } from "~/types";
 import { todayMinusThreeMonthsNoon, todayNoon } from "~/lib/dates";
-import { Card } from "~/components/ui/card";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -22,7 +21,11 @@ export const ThreeMonthHeatMap = ({ habit }: { habit: Habit }) => {
 
   return (
     <>
-      <span>{habit.name}</span>
+      <div className="flex flex-row items-center gap-4">
+        <span>{habit.name}</span>
+        <span className="text-xs text-gray-500"> (last three months)</span>
+      </div>
+
       {ReactApexChart && (
         <ReactApexChart
           options={{
