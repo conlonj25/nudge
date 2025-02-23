@@ -7,6 +7,7 @@ import { type Session } from "next-auth";
 import { usePathname } from "next/navigation";
 import UserAvatar from "~/app/_components/UserAvatar";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 type NavBarComponentProps = {
   session: Session | null;
@@ -63,12 +64,21 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
               )}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <UserAvatar
-              session={session}
-              userImage={userImage}
-              userFallback={userFallback}
-            />
+          <div className="flex flex-row gap-4">
+            {!session?.user.hasAccess && (
+              <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                <Link href={"/subscribe"}>
+                  <Button>Subscribe</Button>
+                </Link>
+              </div>
+            )}
+            <div className="hidden sm:ml-6 sm:flex sm:items-center">
+              <UserAvatar
+                session={session}
+                userImage={userImage}
+                userFallback={userFallback}
+              />
+            </div>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button

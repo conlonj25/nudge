@@ -27,15 +27,17 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      hasAccess: boolean;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    hasAccess: boolean;
+    // ...other properties
+    // role: UserRole;
+  }
 }
 
 /**
@@ -45,7 +47,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: '/auth/login',
+    signIn: "/auth/login",
     // signOut: '/auth/signout',
     // error: '/auth/error',
     // verifyRequest: '/auth/verify-request',
@@ -57,6 +59,7 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        hasAccess: user.hasAccess,
       },
     }),
   },

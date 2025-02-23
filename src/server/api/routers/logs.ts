@@ -2,7 +2,11 @@ import { z } from "zod";
 import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { logs } from "~/server/db/schema";
-import { dateToShortISO, firstDayOfThisYearNoon, lastDayOfThisYearNoon, shortISOToDate } from "~/lib/dates";
+import {
+  dateToShortISO,
+  firstDayOfThisYearNoon,
+  lastDayOfThisYearNoon,
+} from "~/lib/dates";
 import { interpolateLogs } from "~/lib/logs";
 
 export const logRouter = createTRPCRouter({
@@ -17,23 +21,33 @@ export const logRouter = createTRPCRouter({
     }),
 
   getByHabitAndDate: protectedProcedure
-    .input(z.object({
-      habitId: z.number(),
-      startDate: z.date(),
-      endDate: z.date()
-    }))
+    .input(
+      z.object({
+        habitId: z.number(),
+        startDate: z.date(),
+        endDate: z.date(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const sparseLogs = await ctx.db.query.logs.findMany({
         where: (logs, { and, eq, between }) =>
           and(
             eq(logs.habitId, input.habitId),
             eq(logs.userId, ctx.session.user.id),
-            between(logs.date, dateToShortISO(input.startDate), dateToShortISO(input.endDate))
+            between(
+              logs.date,
+              dateToShortISO(input.startDate),
+              dateToShortISO(input.endDate),
+            ),
           ),
         orderBy: (logs, { asc }) => [asc(logs.id)],
       });
 
-      const interpolatedLogs = interpolateLogs(sparseLogs, input.startDate, input.endDate);
+      const interpolatedLogs = interpolateLogs(
+        sparseLogs,
+        input.startDate,
+        input.endDate,
+      );
 
       return interpolatedLogs;
     }),
@@ -46,7 +60,11 @@ export const logRouter = createTRPCRouter({
           and(
             eq(logs.userId, ctx.session.user.id),
             eq(logs.habitId, input.habitId),
-            between(logs.date, dateToShortISO(firstDayOfThisYearNoon()), dateToShortISO(lastDayOfThisYearNoon())),
+            between(
+              logs.date,
+              dateToShortISO(firstDayOfThisYearNoon()),
+              dateToShortISO(lastDayOfThisYearNoon()),
+            ),
           ),
         orderBy: (logs, { asc }) => [asc(logs.date)],
       });
