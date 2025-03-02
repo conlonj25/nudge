@@ -10,7 +10,16 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const signature = headers().get("stripe-signature") ?? [];
+  const signature = headers().get("stripe-signature");
+
+  console.log("headers", headers.toString());
+
+  if (!signature) {
+    return NextResponse.json(
+      { error: "Stripe-Signature header missing" },
+      { status: 400 },
+    );
+  }
 
   let event;
 
