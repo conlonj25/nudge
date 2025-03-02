@@ -11,6 +11,7 @@ export const handleCheckoutSessionCompleted = async (
   stripe: Stripe,
   event: Stripe.CheckoutSessionCompletedEvent,
 ) => {
+  console.warn("HANDLE CHECKHOUT SESSION");
   const checkoutSession = await stripe.checkout.sessions.retrieve(
     event.data.object.id,
     {
@@ -51,5 +52,5 @@ export const handleCheckoutSessionCompleted = async (
     hasAccess: true,
   });
 
-  void handleWelcomeEmail();
+  void handleWelcomeEmail({ email: customer.email });
 };
