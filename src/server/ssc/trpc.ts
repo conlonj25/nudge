@@ -5,7 +5,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 const createSSCContext = async (opts: { headers: Headers }) => {
-  const secret = env.STRIPE_WEBHOOK_SECRET;
+  const secret = env.SSC_SECRET;
 
   return {
     db,

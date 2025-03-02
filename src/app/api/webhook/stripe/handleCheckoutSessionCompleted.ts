@@ -5,6 +5,7 @@ import { isStripeResponseCustomer } from "~/lib/typeguards";
 import { db } from "~/server/db";
 import { userRouter } from "~/server/ssc/routers/users";
 import { createCallerFactory } from "~/server/ssc/trpc";
+import { handleWelcomeEmail } from "./handleWelcomeEmail";
 
 export const handleCheckoutSessionCompleted = async (
   stripe: Stripe,
@@ -50,5 +51,5 @@ export const handleCheckoutSessionCompleted = async (
     hasAccess: true,
   });
 
-  // Extra: >>>>> send email to dashboard <<<<
+  void handleWelcomeEmail();
 };
