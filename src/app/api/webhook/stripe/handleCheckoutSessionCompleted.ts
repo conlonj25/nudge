@@ -11,7 +11,9 @@ export const handleCheckoutSessionCompleted = async (
   stripe: Stripe,
   event: Stripe.CheckoutSessionCompletedEvent,
 ) => {
-  console.warn("HANDLE CHECKHOUT SESSION");
+  console.warn("HANDLE CHECKOUT SESSION");
+  console.warn("ID", event.data.object.id);
+
   const checkoutSession = await stripe.checkout.sessions.retrieve(
     event.data.object.id,
     {
