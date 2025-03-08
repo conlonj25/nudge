@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = headers().get("stripe-signature");
 
-  console.warn("headers", headers.toString());
-
   if (!signature) {
     return NextResponse.json(
       { error: "Stripe-Signature header missing" },
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest) {
       env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err: unknown) {
-    const errMessage = isError(err) ? err.message : "unknow error";
+    const errMessage = isError(err) ? err.message : "unknown error";
 
     console.error(`Webhook signature verification failed. ${errMessage}`);
     return NextResponse.json({ error: errMessage }, { status: 400 });

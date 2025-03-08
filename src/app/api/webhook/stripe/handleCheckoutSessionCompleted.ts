@@ -18,6 +18,7 @@ export const handleCheckoutSessionCompleted = async (
       expand: ["line_items"],
     },
   );
+  console.warn({ checkoutSession });
 
   const customerId = checkoutSession.customer;
 
@@ -32,6 +33,8 @@ export const handleCheckoutSessionCompleted = async (
   const priceId = checkoutSession.line_items?.data[0]?.price?.id ?? "unknown";
 
   const customer = await stripe.customers.retrieve(customerId);
+
+  console.warn({ customer });
 
   if (!isStripeResponseCustomer(customer) || !customer.email) {
     console.error("customer not found - aborted");
@@ -52,5 +55,5 @@ export const handleCheckoutSessionCompleted = async (
     hasAccess: true,
   });
 
-  void handleWelcomeEmail({ email: customer.email });
+  await handleWelcomeEmail({ email: customer.email });
 };
