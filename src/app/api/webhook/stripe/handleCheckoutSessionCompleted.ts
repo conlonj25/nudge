@@ -14,12 +14,21 @@ export const handleCheckoutSessionCompleted = async (
   console.warn("HANDLE CHECKOUT SESSION");
   console.warn("ID", event.data.object.id);
 
-  const checkoutSession = await stripe.checkout.sessions.retrieve(
-    event.data.object.id,
-    {
-      expand: ["line_items"],
-    },
-  );
+  let checkoutSession: Stripe.Response<Stripe.Checkout.Session>;
+
+  try {
+    console.warn("TRY STRIPE CHECKOUT SESSION RETRIEVE");
+    checkoutSession = await stripe.checkout.sessions.retrieve(
+      event.data.object.id,
+      {
+        expand: ["line_items"],
+      },
+    );
+    console.warn("STRIPE CHECKOUT SESSION SUCCESSFUL");
+  } catch {
+    console.warn("STRIPE CHECKOUT SESSION FAILED");
+    return;
+  }
 
   console.warn("CHECKOUT SESSION = ", checkoutSession);
 
