@@ -17,7 +17,6 @@ export const handleCheckoutSessionCompleted = async (
   let checkoutSession: Stripe.Response<Stripe.Checkout.Session>;
 
   try {
-    console.warn("TRY STRIPE CHECKOUT SESSION RETRIEVE");
     checkoutSession = await stripe.checkout.sessions.retrieve(
       event.data.object.id,
       {
@@ -25,47 +24,52 @@ export const handleCheckoutSessionCompleted = async (
       },
     );
     console.warn("STRIPE CHECKOUT SESSION SUCCESSFUL");
-  } catch {
-    console.warn("STRIPE CHECKOUT SESSION FAILED");
+
+    // **Wrap the rest of the code in try/catch:**
+    try {
+      console.warn("CHECKOUT SESSION = ", checkoutSession); // Log BEFORE rest of logic
+      const customerId = checkoutSession.customer;
+
+      if (!customerId || typeof customerId !== "string") {
+        console.error(
+          "received session completed event with no customer id - aborted",
+        );
+        return;
+      }
+
+      const priceId =
+        checkoutSession.line_items?.data[0]?.price?.id ?? "unknown";
+
+      const customer = await stripe.customers.retrieve(customerId);
+
+      console.warn({ customer });
+
+      if (!isStripeResponseCustomer(customer) || !customer.email) {
+        console.error("customer not found - aborted");
+        return;
+      }
+
+      const createCaller = createCallerFactory(userRouter);
+
+      const caller = createCaller({
+        headers: headers(),
+        db,
+        secret: env.SSC_SECRET,
+      });
+
+      await caller.modifyUserAccess({
+        email: customer.email,
+        priceId,
+        hasAccess: true,
+      });
+
+      await handleWelcomeEmail({ email: customer.email });
+    } catch (innerError) {
+      console.error("Error after retrieve:", innerError);
+      return;
+    }
+  } catch (error) {
+    console.error("Error retrieving Checkout Session:", error);
     return;
   }
-
-  console.warn("CHECKOUT SESSION = ", checkoutSession);
-
-  const customerId = checkoutSession.customer;
-
-  if (!customerId || typeof customerId !== "string") {
-    console.error(
-      "received session completed event with no customer id - aborted",
-    );
-
-    return;
-  }
-
-  const priceId = checkoutSession.line_items?.data[0]?.price?.id ?? "unknown";
-
-  const customer = await stripe.customers.retrieve(customerId);
-
-  console.warn({ customer });
-
-  if (!isStripeResponseCustomer(customer) || !customer.email) {
-    console.error("customer not found - aborted");
-    return;
-  }
-
-  const createCaller = createCallerFactory(userRouter);
-
-  const caller = createCaller({
-    headers: headers(),
-    db,
-    secret: env.SSC_SECRET,
-  });
-
-  await caller.modifyUserAccess({
-    email: customer.email,
-    priceId,
-    hasAccess: true,
-  });
-
-  await handleWelcomeEmail({ email: customer.email });
 };
