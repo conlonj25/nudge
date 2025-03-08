@@ -67,9 +67,9 @@ export function NavBarComponent({ session }: NavBarComponentProps) {
           <div className="flex flex-row gap-4">
             {!session?.user.hasAccess && (
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                <Link href={"/subscribe"}>
+                {/* <Link href={"/subscribe"}>
                   <Button>Subscribe</Button>
-                </Link>
+                </Link> */}
               </div>
             )}
             <div className="hidden sm:ml-6 sm:flex sm:items-center">

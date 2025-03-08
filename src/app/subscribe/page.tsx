@@ -1,4 +1,3 @@
-// import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "~/components/ui/button";
